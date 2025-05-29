@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:stf="urn:oecd:ties:stf:v2" xmlns:sd="urn:cec.eu.int:taxud:directtax:eusd:v4" xmlns:dt="urn:cec.eu.int:taxud:directtax:v4" targetNamespace="urn:cec.eu.int:taxud:directtax:eusd:v4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="4.0">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="en">
+		=== HISTORY===
+		- Version 1.0: first issue of the schema as part of the Technical Specifications.
+		- Version 2.0: second issue, after MS review of the Technical Specifications
+		- Version 3.0: third issue, after split of corrections into spontaneous/on-request
+		- Version 4.0: Alignment of versions in the scope of RfA 09-592.
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="stfmodifiedtypes_v4.xsd"/>
+	<xsd:import namespace="urn:oecd:ties:stf:v2" schemaLocation="stftypes-2.0.xsd"/>
+	<xsd:import namespace="urn:cec.eu.int:taxud:directtax:v4" schemaLocation="directtax_v4.xsd"/>
+	<xsd:complexType name="Article9_Type">
+		<xsd:sequence>
+			<xsd:element name="PayingAgent" type="sd:CorrectablePAParty_Type"/>
+			<xsd:element name="BeneficialOwnerInfo" type="sd:BeneficialOwnerInfo_Type" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="EntityInfo_Type">
+		<xsd:sequence>
+			<xsd:element name="Entity" type="sd:CorrectableEntityParty_Type"/>
+			<xsd:element name="Art4_2PaymentData" type="sd:CorrectableArt4_2PaymentData_Type" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CorrectablePayingAgentInfo_Type">
+		<xsd:complexContent>
+			<xsd:extension base="sd:PayingAgentInfo_Type">
+				<xsd:sequence>
+					<xsd:element name="DocSpec" type="sd:DocSpec_Type"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="PayingAgentInfo_Type">
+		<xsd:sequence>
+			<xsd:element name="PayingAgent" type="sd:PAParty_Type"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="BeneficialOwnerInfo_Type">
+		<xsd:sequence>
+			<xsd:element name="BeneficialOwner" type="sd:CorrectableBOParty_Type"/>
+			<xsd:element name="Art9PaymentData" type="sd:CorrectableArt9PaymentData_Type" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

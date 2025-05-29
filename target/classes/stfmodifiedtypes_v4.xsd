@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:dt="urn:cec.eu.int:taxud:directtax:v4" xmlns:sd="urn:cec.eu.int:taxud:directtax:eusd:v4" xmlns:stf="urn:oecd:ties:stf:v2" xmlns:dtm="urn:cec.eu.int:taxud:directtax:v4" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:cec.eu.int:taxud:directtax:eusd:v4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="4.0">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="en">
+			=== HISTORY===
+		- Version 1.0: first issue of the schema as part of the Technical Specifications.
+		- Version 2.0: second issue, after MS review of the Technical Specifications
+		- Version 2.1: third issue, after further MS review
+			- Remove 0 from DocTypeIndic_Type
+		- Version 2.2: 
+			- Add 03 (partnership) to PALegalType_Type
+		- Version 3 third issue, after split of corrections into spontaneous/on-request
+	 </xsd:documentation>
+	</xsd:annotation>
+	<xsd:import namespace="urn:oecd:ties:stf:v2" schemaLocation="stftypes-2.0.xsd"/>
+	<xsd:import namespace="urn:cec.eu.int:taxud:directtax:v4" schemaLocation="directtax_v4.xsd"/>
+	<xsd:complexType name="CorrectableArt9PaymentData_Type">
+		<xsd:complexContent>
+			<xsd:extension base="sd:Art9PaymentData_Type">
+				<xsd:sequence>
+					<xsd:element name="DocSpec" type="sd:DocSpec_Type"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Art9PaymentData_Type">
+		<xsd:sequence>
+			<xsd:element name="TaxYearEnd" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="SpecificPaymentType" type="sd:SpecifPaymentType_Type"/>
+			<xsd:element name="Art9Payment" type="sd:Art9Payment_Type"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CorrectableArt4_2PaymentData_Type">
+		<xsd:complexContent>
+			<xsd:extension base="sd:Art4_2PaymentData_Type">
+				<xsd:sequence>
+					<xsd:element name="DocSpec" type="sd:DocSpec_Type"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Art4_2PaymentData_Type">
+		<xsd:sequence>
+			<xsd:element name="TaxYearEnd" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="SpecificPaymentType" type="sd:SpecifPaymentType_Type" minOccurs="0"/>
+			<xsd:element name="Art4_2Payment" type="sd:Art4_2Payment_Type"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="Other_Type">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="othQlf" type="xsd:string" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="EUSDAcctInfo_Type">
+		<xsd:sequence>
+			<xsd:choice>
+				<xsd:sequence>
+					<xsd:choice>
+						<xsd:element name="IBAN" type="stf:IBAN_Type"/>
+						<xsd:element name="OBAN" type="stf:OBAN_Type"/>
+					</xsd:choice>
+					<xsd:element name="SWIFT" type="stf:SWIFT_Type" minOccurs="0"/>
+				</xsd:sequence>
+				<xsd:element name="ISIN" type="stf:ISIN_Type"/>
+				<xsd:element name="OSIN" type="stf:OSIN_Type"/>
+				<xsd:element name="Other" type="sd:Other_Type"/>
+			</xsd:choice>
+		</xsd:sequence>
+		<xsd:attribute name="shared" type="sd:shared_Type" default="unknown_if_shared"/>
+	</xsd:complexType>
+	<xsd:simpleType name="triState_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:pattern value="true"/>
+			<xsd:pattern value="false"/>
+			<xsd:pattern value="unknown"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="shared_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="unknown_if_shared"/>
+			<xsd:enumeration value="not_shared"/>
+			<xsd:enumeration value="shared_repartition_evenly"/>
+			<xsd:enumeration value="shared_repartition_actual"/>
+			<xsd:enumeration value="shared_repartition_total"/>
+			<xsd:enumeration value="shared_repartition_unknown"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="RoundedMonAmnt_Type">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:integer">
+				<xsd:attribute name="currCode" type="dt:currCode_Type" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="Art4_2Payment_Type">
+		<xsd:sequence>
+			<xsd:element name="YearOfPayment" type="xsd:gYear" minOccurs="0"/>
+			<xsd:element name="MonAmnt" type="sd:RoundedMonAmnt_Type"/>
+			<xsd:element name="AcctInfo" type="sd:EUSDAcctInfo_Type" minOccurs="0"/>
+		</xsd:sequence>
+		<xsd:attribute name="paymentQlf" type="stf:paymentQlf_Type" use="required" fixed="gip"/>
+	</xsd:complexType>
+	<xsd:complexType name="Art9Payment_Type">
+		<xsd:sequence>
+			<xsd:element name="YearOfPayment" type="xsd:gYear"/>
+			<xsd:element name="MonAmnt" type="sd:RoundedMonAmnt_Type"/>
+			<xsd:element name="AcctInfo" type="sd:EUSDAcctInfo_Type"/>
+		</xsd:sequence>
+		<xsd:attribute name="paymentQlf" type="stf:paymentQlf_Type" use="required" fixed="gip"/>
+	</xsd:complexType>
+	<xsd:complexType name="IndivPersData_Type">
+		<xsd:sequence>
+			<xsd:element name="Gender" type="stf:Gender_Type" minOccurs="0"/>
+			<xsd:element name="BirthDate" type="xsd:date" minOccurs="0"/>
+			<xsd:element name="BirthCity" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="BirthCitySubentity" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="BirthCountryCode" minOccurs="0">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:pattern value="[A-Z]{2}"/>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="OtherInfo_Type">
+		<xsd:sequence>
+			<xsd:element name="PartyTypeDescription" type="xsd:string" fixed="DIR.2003/48/EC Art. 4.2"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CorrectableEntityParty_Type">
+		<xsd:complexContent>
+			<xsd:extension base="sd:EntityParty_Type">
+				<xsd:sequence>
+					<xsd:element name="DocSpec" type="sd:DocSpec_Type"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="EntityParty_Type">
+		<xsd:sequence>
+			<xsd:element name="OtherInfo" type="sd:OtherInfo_Type"/>
+			<xsd:element name="NameFree" type="sd:EntityName_Type"/>
+			<xsd:element name="Address" type="sd:Address_Type"/>
+		</xsd:sequence>
+		<xsd:attribute name="oecdLegalType" type="stf:oecdLegalType_Type" use="required" fixed="06"/>
+	</xsd:complexType>
+	<xsd:complexType name="CorrectablePAParty_Type">
+		<xsd:complexContent>
+			<xsd:extension base="sd:PAParty_Type">
+				<xsd:sequence>
+					<xsd:element name="DocSpec" type="sd:DocSpec_Type"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="PAParty_Type">
+		<xsd:sequence>
+			<xsd:element name="OtherInfo" type="sd:OtherInfo_Type" minOccurs="0"/>
+			<xsd:element name="PartyId" type="sd:PartyId_Type" minOccurs="0"/>
+			<xsd:element name="PersData" type="sd:PersData_Type" minOccurs="0"/>
+			<xsd:element name="Name" type="sd:Name_Type"/>
+			<xsd:element name="Address" type="sd:Address_Type"/>
+		</xsd:sequence>
+		<xsd:attribute name="oecdLegalType" type="sd:PALegalType_Type" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="CorrectableBOParty_Type">
+		<xsd:complexContent>
+			<xsd:extension base="sd:BOParty_Type">
+				<xsd:sequence>
+					<xsd:element name="DocSpec" type="sd:DocSpec_Type"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="BOParty_Type">
+		<xsd:sequence>
+			<xsd:element name="ResCountryCode" type="dt:CountryCode_Type"/>
+			<xsd:element name="PartyId" type="sd:PartyId_Type" minOccurs="0"/>
+			<xsd:element name="IndivPersData" type="sd:IndivPersData_Type" minOccurs="0"/>
+			<xsd:element name="OtherPersData" type="sd:Other_Type" minOccurs="0"/>
+			<xsd:element name="Name" type="sd:Name_Type"/>
+			<xsd:element name="Address" type="sd:Address_Type" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="oecdLegalType" type="sd:BOLegalType_Type" use="required"/>
+		<xsd:attribute name="contractBefore2004" type="sd:triState_Type" use="required"/>
+	</xsd:complexType>
+	<xsd:complexType name="PersData_Type">
+		<xsd:choice>
+			<xsd:element name="IndivPersData" type="sd:IndivPersData_Type"/>
+			<xsd:element name="LegalPersData" type="stf:LegalPersData_Type"/>
+		</xsd:choice>
+	</xsd:complexType>
+	<xsd:simpleType name="partyIdType_Type">
+		<xsd:restriction base="stf:partyIdType_Type">
+			<xsd:enumeration value="TIN"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="PartyId_Type">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="partyIdType" type="sd:partyIdType_Type" use="required"/>
+				<xsd:attribute name="issuedBy" type="sd:IssuedByCountryCode_Type" use="required"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:simpleType name="IssuedByCountryCode_Type">
+		<xsd:union memberTypes="dt:CountryCode_Type">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value=""/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:union>
+	</xsd:simpleType>
+	<xsd:simpleType name="legalAddressType_Type">
+		<xsd:union memberTypes="stf:legalAddressType_Type">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern value="fiscalResidence"/>
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:union>
+	</xsd:simpleType>
+	<xsd:simpleType name="SpecifPaymentType_Type">
+		<xsd:restriction base="xsd:NMTOKEN">
+			<xsd:pattern value="((a|1)xx([1-2]|x))"/>
+			<xsd:pattern value="((b|[d-e])([1-2]|x){3})"/>
+			<xsd:pattern value="(c([1-2]|x)x([1-2]|x))"/>
+			<xsd:pattern value="(2xxx)"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="PALegalType_Type">
+		<xsd:restriction base="stf:oecdLegalType_Type">
+			<xsd:enumeration value="01"/>
+			<xsd:enumeration value="02"/>
+			<xsd:enumeration value="03"/>
+			<xsd:enumeration value="06"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="BOLegalType_Type">
+		<xsd:restriction base="stf:oecdLegalType_Type">
+			<xsd:enumeration value="01"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="DocTypeIndic_Type">
+		<xsd:restriction base="xsd:byte">
+			<xsd:enumeration value="1"/>
+			<xsd:enumeration value="2"/>
+			<xsd:enumeration value="3"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="DocSpec_Type">
+		<xsd:sequence>
+			<xsd:element name="DocTypeIndic" type="sd:DocTypeIndic_Type"/>
+			<xsd:element name="DocRefId" type="dt:UID_Type"/>
+			<xsd:element name="CorrDocRefId" type="dt:UID_Type" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CancellationDocSpec_Type">
+		<xsd:complexContent>
+			<xsd:restriction base="sd:DocSpec_Type">
+				<xsd:sequence>
+					<xsd:element name="DocTypeIndic" type="sd:DocTypeIndic_Type" fixed="3"/>
+					<xsd:element name="DocRefId" type="dt:UID_Type"/>
+					<xsd:element name="CorrDocRefId" type="dt:UID_Type"/>
+				</xsd:sequence>
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="NameStruct_Type">
+		<xsd:sequence>
+			<xsd:element name="PrecedingTitle" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="Title" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="FirstName">
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="xsd:string">
+							<xsd:attribute name="xnlNameType"/>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="MiddleName" minOccurs="0" maxOccurs="unbounded">
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="xsd:string">
+							<xsd:attribute name="xnlNameType"/>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="NamePrefix" minOccurs="0">
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="xsd:string">
+							<xsd:attribute name="xnlNameType"/>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="LastName">
+				<xsd:complexType>
+					<xsd:simpleContent>
+						<xsd:extension base="xsd:string">
+							<xsd:attribute name="xnlNameType"/>
+						</xsd:extension>
+					</xsd:simpleContent>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="GenerationIdentifier" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Suffix" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="GeneralSuffix" type="xsd:string" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="EntityName_Type">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:string">
+				<xsd:attribute name="nameType" type="stf:nameType_Type" use="optional"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="Name_Type">
+		<xsd:choice>
+			<xsd:element name="NameFree" type="xsd:string"/>
+			<xsd:sequence>
+				<xsd:element name="NameStruct" type="sd:NameStruct_Type"/>
+				<xsd:element name="NameFree" type="xsd:string" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:choice>
+		<xsd:attribute name="nameType" type="stf:nameType_Type" use="optional"/>
+	</xsd:complexType>
+	<xsd:complexType name="AddressStruct_Type">
+		<xsd:complexContent>
+			<xsd:extension base="stf:AddressFix_Type">
+				<xsd:sequence>
+					<xsd:element name="OtherLocalId" type="xsd:string" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="Address_Type">
+		<xsd:sequence>
+			<xsd:element name="CountryCode" type="dt:CountryCode_Type"/>
+			<xsd:choice>
+				<xsd:element name="AddressFree" type="xsd:string"/>
+				<xsd:sequence>
+					<xsd:element name="AddressStruct" type="sd:AddressStruct_Type"/>
+					<xsd:element name="AddressFree" type="xsd:string" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:choice>
+		</xsd:sequence>
+		<xsd:attribute name="legalAddressType" type="sd:legalAddressType_Type" use="optional"/>
+	</xsd:complexType>
+</xsd:schema>

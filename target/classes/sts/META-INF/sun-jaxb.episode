@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<bindings version="2.1" xmlns="http://java.sun.com/xml/ns/jaxb">
+  <!--
+
+Questo file è stato generato dall'architettura JavaTM per XML Binding (JAXB) Reference Implementation, v2.2.11 
+Vedere <a href="http://java.sun.com/xml/jaxb">http://java.sun.com/xml/jaxb</a> 
+Qualsiasi modifica a questo file andrà persa durante la ricompilazione dello schema di origine. 
+Generato il: 2025.05.23 alle 09:10:02 AM CEST 
+
+  -->
+  <bindings scd="x-schema::tns" xmlns:tns="urn:cec.eu.int:taxud:directtax:eusd:v4">
+    <schemaBindings map="false">
+      <package name="_int.eu.cec.taxud.directtax.eusd.v4"/>
+    </schemaBindings>
+    <bindings scd="~tns:ReqElements_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.ReqElementsType"/>
+    </bindings>
+    <bindings scd="~tns:NameStruct_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.NameStructType"/>
+    </bindings>
+    <bindings scd="~tns:RequestRejection_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.RequestRejectionType"/>
+    </bindings>
+    <bindings scd="tns:InitialElements">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.InitialElements"/>
+    </bindings>
+    <bindings scd="~tns:EntityInfo_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.EntityInfoType"/>
+    </bindings>
+    <bindings scd="~tns:Article9_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.Article9Type"/>
+    </bindings>
+    <bindings scd="tns:SpontaneousCorrectionElements">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.SpontaneousCorrectionElements"/>
+    </bindings>
+    <bindings scd="~tns:CancellationDocSpec_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.CancellationDocSpecType"/>
+    </bindings>
+    <bindings scd="~tns:CorrectableEntityParty_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.CorrectableEntityPartyType"/>
+    </bindings>
+    <bindings scd="~tns:CorrectedArt4_2PaymentData_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.CorrectedArt42PaymentDataType"/>
+    </bindings>
+    <bindings scd="~tns:CorrectablePAParty_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.CorrectablePAPartyType"/>
+    </bindings>
+    <bindings scd="~tns:CorrectedBeneficialOwner_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.CorrectedBeneficialOwnerType"/>
+    </bindings>
+    <bindings scd="~tns:CorrectedArt9PaymentData_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.CorrectedArt9PaymentDataType"/>
+    </bindings>
+    <bindings scd="tns:CorrectionResponseElements">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.CorrectionResponseElements"/>
+    </bindings>
+    <bindings scd="tns:CorrectedElement">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.CorrectedElement"/>
+    </bindings>
+    <bindings scd="tns:CorrRequestElements">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.CorrRequestElements"/>
+    </bindings>
+    <bindings scd="~tns:CorrectionRequestElement_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.CorrectionRequestElementType"/>
+    </bindings>
+    <bindings scd="tns:RejectionElement">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.RejectionElement"/>
+    </bindings>
+    <bindings scd="~tns:CorrectableArt9PaymentData_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.CorrectableArt9PaymentDataType"/>
+    </bindings>
+    <bindings scd="~tns:Art9PaymentData_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.Art9PaymentDataType"/>
+    </bindings>
+    <bindings scd="~tns:CorrectableArt4_2PaymentData_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.CorrectableArt42PaymentDataType"/>
+    </bindings>
+    <bindings scd="~tns:Art4_2PaymentData_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.Art42PaymentDataType"/>
+    </bindings>
+    <bindings scd="~tns:Other_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.OtherType"/>
+    </bindings>
+    <bindings scd="~tns:EUSDAcctInfo_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.EUSDAcctInfoType"/>
+    </bindings>
+    <bindings scd="~tns:RoundedMonAmnt_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.RoundedMonAmntType"/>
+    </bindings>
+    <bindings scd="~tns:Art4_2Payment_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.Art42PaymentType"/>
+    </bindings>
+    <bindings scd="~tns:Art9Payment_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.Art9PaymentType"/>
+    </bindings>
+    <bindings scd="~tns:IndivPersData_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.IndivPersDataType"/>
+    </bindings>
+    <bindings scd="~tns:OtherInfo_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.OtherInfoType"/>
+    </bindings>
+    <bindings scd="~tns:EntityParty_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.EntityPartyType"/>
+    </bindings>
+    <bindings scd="~tns:PAParty_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.PAPartyType"/>
+    </bindings>
+    <bindings scd="~tns:CorrectableBOParty_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.CorrectableBOPartyType"/>
+    </bindings>
+    <bindings scd="~tns:BOParty_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.BOPartyType"/>
+    </bindings>
+    <bindings scd="~tns:PersData_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.PersDataType"/>
+    </bindings>
+    <bindings scd="~tns:PartyId_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.PartyIdType"/>
+    </bindings>
+    <bindings scd="~tns:DocSpec_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.DocSpecType"/>
+    </bindings>
+    <bindings scd="~tns:EntityName_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.EntityNameType"/>
+    </bindings>
+    <bindings scd="~tns:Name_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.NameType"/>
+    </bindings>
+    <bindings scd="~tns:AddressStruct_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.AddressStructType"/>
+    </bindings>
+    <bindings scd="~tns:Address_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.AddressType"/>
+    </bindings>
+    <bindings scd="~tns:CorrectablePayingAgentInfo_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.CorrectablePayingAgentInfoType"/>
+    </bindings>
+    <bindings scd="~tns:PayingAgentInfo_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.PayingAgentInfoType"/>
+    </bindings>
+    <bindings scd="~tns:BeneficialOwnerInfo_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.BeneficialOwnerInfoType"/>
+    </bindings>
+    <bindings scd="~tns:DataBody_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.DataBodyType"/>
+    </bindings>
+    <bindings scd="~tns:CorrRequestBody_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.CorrRequestBodyType"/>
+    </bindings>
+    <bindings scd="~tns:RejectionBody_Type">
+      <class ref="_int.eu.cec.taxud.directtax.eusd.v4.RejectionBodyType"/>
+    </bindings>
+    <bindings scd="~tns:shared_Type">
+      <typesafeEnumClass ref="_int.eu.cec.taxud.directtax.eusd.v4.SharedType"/>
+    </bindings>
+    <bindings scd="~tns:partyIdType_Type">
+      <typesafeEnumClass ref="_int.eu.cec.taxud.directtax.eusd.v4.PartyIdTypeType"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="urn:oecd:ties:stf:v2">
+    <schemaBindings map="false">
+      <package name="oecd.ties.stf.v2"/>
+    </schemaBindings>
+    <bindings scd="~tns:NameFix_Type">
+      <class ref="oecd.ties.stf.v2.NameFixType"/>
+    </bindings>
+    <bindings scd="~tns:SpecificPaymentType_Type">
+      <class ref="oecd.ties.stf.v2.SpecificPaymentTypeType"/>
+    </bindings>
+    <bindings scd="~tns:AcctInfo_Type">
+      <class ref="oecd.ties.stf.v2.AcctInfoType"/>
+    </bindings>
+    <bindings scd="~tns:AddressFix_Type">
+      <class ref="oecd.ties.stf.v2.AddressFixType"/>
+    </bindings>
+    <bindings scd="~tns:Address_Type">
+      <class ref="oecd.ties.stf.v2.AddressType"/>
+    </bindings>
+    <bindings scd="~tns:DocSpec_Type">
+      <class ref="oecd.ties.stf.v2.DocSpecType"/>
+    </bindings>
+    <bindings scd="~tns:IndivPersData_Type">
+      <class ref="oecd.ties.stf.v2.IndivPersDataType"/>
+    </bindings>
+    <bindings scd="~tns:LegalPersData_Type">
+      <class ref="oecd.ties.stf.v2.LegalPersDataType"/>
+    </bindings>
+    <bindings scd="~tns:MessageSpec_Type">
+      <class ref="oecd.ties.stf.v2.MessageSpecType"/>
+    </bindings>
+    <bindings scd="~tns:MonAmnt_Type">
+      <class ref="oecd.ties.stf.v2.MonAmntType"/>
+    </bindings>
+    <bindings scd="~tns:Name_Type">
+      <class ref="oecd.ties.stf.v2.NameType"/>
+    </bindings>
+    <bindings scd="~tns:OBAN_Type">
+      <class ref="oecd.ties.stf.v2.OBANType"/>
+    </bindings>
+    <bindings scd="~tns:OSIN_Type">
+      <class ref="oecd.ties.stf.v2.OSINType"/>
+    </bindings>
+    <bindings scd="~tns:OtherInfo_Type">
+      <class ref="oecd.ties.stf.v2.OtherInfoType"/>
+    </bindings>
+    <bindings scd="~tns:PartyId_Type">
+      <class ref="oecd.ties.stf.v2.PartyIdType"/>
+    </bindings>
+    <bindings scd="~tns:Party_Type">
+      <class ref="oecd.ties.stf.v2.PartyType"/>
+    </bindings>
+    <bindings scd="~tns:PersData_Type">
+      <class ref="oecd.ties.stf.v2.PersDataType"/>
+    </bindings>
+    <bindings scd="~tns:PaymentData_Type">
+      <class ref="oecd.ties.stf.v2.PaymentDataType"/>
+    </bindings>
+    <bindings scd="~tns:Payment_Type">
+      <class ref="oecd.ties.stf.v2.PaymentType"/>
+    </bindings>
+    <bindings scd="~tns:CountryCodeExMS_Type">
+      <typesafeEnumClass ref="oecd.ties.stf.v2.CountryCodeExMSType"/>
+    </bindings>
+    <bindings scd="~tns:MSCountryCode_Type">
+      <typesafeEnumClass ref="oecd.ties.stf.v2.MSCountryCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PeculiarCountryCode_Type">
+      <typesafeEnumClass ref="oecd.ties.stf.v2.PeculiarCountryCodeType"/>
+    </bindings>
+    <bindings scd="~tns:currCode_Type">
+      <typesafeEnumClass ref="oecd.ties.stf.v2.CurrCodeType"/>
+    </bindings>
+    <bindings scd="~tns:MSCurrCode_Type">
+      <typesafeEnumClass ref="oecd.ties.stf.v2.MSCurrCodeType"/>
+    </bindings>
+    <bindings scd="~tns:Gender_Type">
+      <typesafeEnumClass ref="oecd.ties.stf.v2.GenderType"/>
+    </bindings>
+    <bindings scd="~tns:legalAddressType_Type">
+      <typesafeEnumClass ref="oecd.ties.stf.v2.LegalAddressTypeType"/>
+    </bindings>
+    <bindings scd="~tns:nameType_Type">
+      <typesafeEnumClass ref="oecd.ties.stf.v2.NameTypeType"/>
+    </bindings>
+    <bindings scd="~tns:partyIdType_Type">
+      <typesafeEnumClass ref="oecd.ties.stf.v2.PartyIdTypeType"/>
+    </bindings>
+    <bindings scd="~tns:paymentQlf_Type">
+      <typesafeEnumClass ref="oecd.ties.stf.v2.PaymentQlfType"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="urn:ec.europa.eu:taxud:directtax:aeoi:common:v2">
+    <schemaBindings map="false">
+      <package name="eu.europa.ec.taxud.directtax.aeoi.common.v2"/>
+    </schemaBindings>
+    <bindings scd="~tns:FinancialInfo_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.FinancialInfoType"/>
+    </bindings>
+    <bindings scd="~tns:I18nString_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.I18NStringType"/>
+    </bindings>
+    <bindings scd="~tns:AdjustablePrecisionDate_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.AdjustablePrecisionDateType"/>
+    </bindings>
+    <bindings scd="~tns:AEOIBodyWithTaxYear_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.AEOIBodyWithTaxYearType"/>
+    </bindings>
+    <bindings scd="~tns:PersonId_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.PersonIdType"/>
+    </bindings>
+    <bindings scd="~tns:PersonIdOpt_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.PersonIdOptType"/>
+    </bindings>
+    <bindings scd="~tns:NaturalPerson_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.NaturalPersonType"/>
+    </bindings>
+    <bindings scd="~tns:NaturalPersonOpt_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.NaturalPersonOptType"/>
+    </bindings>
+    <bindings scd="~tns:Birth_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.BirthType"/>
+    </bindings>
+    <bindings scd="~tns:BirthOpt_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.BirthOptType"/>
+    </bindings>
+    <bindings scd="~tns:Name_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.NameType"/>
+    </bindings>
+    <bindings scd="~tns:NameOpt_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.NameOptType"/>
+    </bindings>
+    <bindings scd="~tns:NameStruct_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.NameStructType"/>
+    </bindings>
+    <bindings scd="~tns:NameStructOpt_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.NameStructOptType"/>
+    </bindings>
+    <bindings scd="~tns:NonNaturalPerson_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.NonNaturalPersonType"/>
+    </bindings>
+    <bindings scd="~tns:NonNaturalPersonOpt_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.NonNaturalPersonOptType"/>
+    </bindings>
+    <bindings scd="~tns:NonNaturalPersonName_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.NonNaturalPersonNameType"/>
+    </bindings>
+    <bindings scd="~tns:NonNaturalPersonNameOpt_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.NonNaturalPersonNameOptType"/>
+    </bindings>
+    <bindings scd="~tns:Commencement_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.CommencementType"/>
+    </bindings>
+    <bindings scd="~tns:Payment_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.PaymentType"/>
+    </bindings>
+    <bindings scd="~tns:AccountInformation_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.AccountInformationType"/>
+    </bindings>
+    <bindings scd="~tns:BankAccountNumber_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.BankAccountNumberType"/>
+    </bindings>
+    <bindings scd="~tns:SecuritiesIdentificationNumber_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.SecuritiesIdentificationNumberType"/>
+    </bindings>
+    <bindings scd="~tns:MoneyAmount_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.MoneyAmountType"/>
+    </bindings>
+    <bindings scd="~tns:Address_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.AddressType"/>
+    </bindings>
+    <bindings scd="~tns:AddressOpt_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.AddressOptType"/>
+    </bindings>
+    <bindings scd="~tns:AddressStruct_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.AddressStructType"/>
+    </bindings>
+    <bindings scd="~tns:AddressStructOpt_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.AddressStructOptType"/>
+    </bindings>
+    <bindings scd="~tns:CountryCodeExMS_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.CountryCodeExMSType"/>
+    </bindings>
+    <bindings scd="~tns:MSCountryCode_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.MSCountryCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PeculiarCountryCode_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.PeculiarCountryCodeType"/>
+    </bindings>
+    <bindings scd="~tns:currCode_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.CurrCodeType"/>
+    </bindings>
+    <bindings scd="~tns:MSCurrCode_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.MSCurrCodeType"/>
+    </bindings>
+    <bindings scd="~tns:AddressType_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.AddressTypeType"/>
+    </bindings>
+    <bindings scd="~tns:AmountType_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.AmountTypeType"/>
+    </bindings>
+    <bindings scd="~tns:Capacity_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.CapacityType"/>
+    </bindings>
+    <bindings scd="~tns:ContributionTaxTreatment_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.ContributionTaxTreatmentType"/>
+    </bindings>
+    <bindings scd="~tns:IDType_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.IDTypeType"/>
+    </bindings>
+    <bindings scd="~tns:NameType_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.NameTypeType"/>
+    </bindings>
+    <bindings scd="~tns:NNPPersonType_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.NNPPersonTypeType"/>
+    </bindings>
+    <bindings scd="~tns:PayerType_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.PayerTypeType"/>
+    </bindings>
+    <bindings scd="~tns:PermanentEstablishment_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.PermanentEstablishmentType"/>
+    </bindings>
+    <bindings scd="~tns:ReportingType_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.ReportingTypeType"/>
+    </bindings>
+    <bindings scd="~tns:ShareType_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.ShareTypeType"/>
+    </bindings>
+    <bindings scd="~tns:TaxableBasisType_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common.v2.TaxableBasisTypeType"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="urn:ec.europa.eu:taxud:directtax:aeoi:v1">
+    <schemaBindings map="false">
+      <package name="eu.europa.ec.taxud.directtax.aeoi.v1"/>
+    </schemaBindings>
+    <bindings scd="tns:DAC1_Statistics">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.v1.DAC1StatisticsSTS"/>
+    </bindings>
+    <bindings scd="~tns:Records_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.v1.RecordsTypeSTS"/>
+    </bindings>
+    <bindings scd="~tns:STS-110_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.v1.STS110Type"/>
+    </bindings>
+    <bindings scd="~tns:STS-120_Type">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.v1.STS120Type"/>
+    </bindings>
+    <bindings scd="~tns:MsgApplicationIdSTS_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.v1.MsgApplicationIdSTSType"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="urn:cec.eu.int:taxud:directtax:v4">
+    <schemaBindings map="false">
+      <package name="_int.eu.cec.taxud.directtax.v4"/>
+    </schemaBindings>
+    <bindings scd="tns:DirectTaxMessage">
+      <class ref="_int.eu.cec.taxud.directtax.v4.DirectTaxMessage"/>
+    </bindings>
+    <bindings scd="~tns:Header_Type">
+      <class ref="_int.eu.cec.taxud.directtax.v4.HeaderType"/>
+    </bindings>
+    <bindings scd="~tns:Body_Type">
+      <class ref="_int.eu.cec.taxud.directtax.v4.BodyType"/>
+    </bindings>
+    <bindings scd="~tns:CountryCodeExMS_Type">
+      <typesafeEnumClass ref="_int.eu.cec.taxud.directtax.v4.CountryCodeExMSType"/>
+    </bindings>
+    <bindings scd="~tns:MSCountryCode_Type">
+      <typesafeEnumClass ref="_int.eu.cec.taxud.directtax.v4.MSCountryCodeType"/>
+    </bindings>
+    <bindings scd="~tns:PeculiarCountryCode_Type">
+      <typesafeEnumClass ref="_int.eu.cec.taxud.directtax.v4.PeculiarCountryCodeType"/>
+    </bindings>
+    <bindings scd="~tns:currCode_Type">
+      <typesafeEnumClass ref="_int.eu.cec.taxud.directtax.v4.CurrCodeType"/>
+    </bindings>
+    <bindings scd="~tns:MSCurrCode_Type">
+      <typesafeEnumClass ref="_int.eu.cec.taxud.directtax.v4.MSCurrCodeType"/>
+    </bindings>
+  </bindings>
+  <bindings scd="x-schema::tns" xmlns:tns="urn:ec.europa.eu:taxud:directtax:aeoi:common_statistics:v2">
+    <schemaBindings map="false">
+      <package name="eu.europa.ec.taxud.directtax.aeoi.common_statistics.v2"/>
+    </schemaBindings>
+    <bindings scd="~tns:Header">
+      <class ref="eu.europa.ec.taxud.directtax.aeoi.common_statistics.v2.Header"/>
+    </bindings>
+    <bindings scd="~tns:MsgApplicationId_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common_statistics.v2.MsgApplicationIdType"/>
+    </bindings>
+    <bindings scd="~tns:Relationship_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common_statistics.v2.RelationshipType"/>
+    </bindings>
+    <bindings scd="~tns:AccountHolderType_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common_statistics.v2.AccountHolderTypeType"/>
+    </bindings>
+    <bindings scd="~tns:MessageTypeIndicator_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common_statistics.v2.MessageTypeIndicatorType"/>
+    </bindings>
+    <bindings scd="~tns:Status_Type">
+      <typesafeEnumClass ref="eu.europa.ec.taxud.directtax.aeoi.common_statistics.v2.StatusType"/>
+    </bindings>
+  </bindings>
+</bindings>
+

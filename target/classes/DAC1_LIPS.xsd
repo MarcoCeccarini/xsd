@@ -1,0 +1,641 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:ec.europa.eu:taxud:directtax:aeoi:v1" xmlns:aeoi="urn:ec.europa.eu:taxud:directtax:aeoi:v1" xmlns:cm="urn:ec.europa.eu:taxud:directtax:aeoi:common:v2" xmlns:cms="urn:ec.europa.eu:taxud:directtax:aeoi:common_statistics:v2" xmlns:co="urn:oecd:ties:stf:v2" xmlns:dt="urn:cec.eu.int:taxud:directtax:v4" xmlns:stfm="urn:cec.eu.int:taxud:directtax:eusd:v4" targetNamespace="urn:ec.europa.eu:taxud:directtax:aeoi:v1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!--HISTORY	
+	20/08/2024 - "Unknown" option introduced in PolicyType_Type enumeration to be selected when information is not available
+	15/12/2023 - Enforce mandatory fields: minOccurs=0 => minOccurs=1
+	22/05/2023 - DAC1-608: Align discrepancies in boolean definitions between DAC1, DAC2 and DAC1-DAC2-Stats 
+		             DAC1-603: Align discrepancies in enum definitions between DAC1, DAC2 and DAC1-DAC2-Stats
+	-->
+	<xs:import namespace="urn:ec.europa.eu:taxud:directtax:aeoi:common:v2" schemaLocation="commontypes_v2.xsd"/>
+	<xs:import namespace="urn:ec.europa.eu:taxud:directtax:aeoi:common_statistics:v2" schemaLocation="commontypes_statistics.xsd"/>
+	<xs:import namespace="urn:oecd:ties:stf:v2" schemaLocation="oecdtypes_v2.xsd"/>
+	<xs:import namespace="urn:cec.eu.int:taxud:directtax:v4" schemaLocation="directtax_v4.xsd"/>
+	<xs:import namespace="urn:cec.eu.int:taxud:directtax:eusd:v4" schemaLocation="stfmodifiedtypes_v4.xsd"/>
+
+	<!-- DAC1_Statistics -->
+	<xs:element name="DAC1_Statistics">
+		<xs:annotation>
+			<xs:documentation>This is the root element of the statistics on Initial and Correction messages.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" type="cms:Header">
+					<xs:annotation>
+						<xs:documentation>This element represents the header of the message, containing its general information.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:sequence>
+					<xs:element name="records" type="Records_Type" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>This element represents the statistics related to the LIP category of income and capital. It is equivalent to the Microsoft Excel file defined in the AEOI DAC1 FS for the LIP category statistics.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:sequence>
+			<xs:attribute name="version" type="xs:decimal" use="required">
+				<xs:annotation>
+					<xs:documentation>Identification of the XSD version being used.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:simpleType name="EventType_Type">
+		<xs:annotation>
+			<xs:documentation>LIP Event Type is divided into:
+•	IN Events - which are funding the LIP Policy;
+•	OUT Events - which represent payments made by an Insurer/Paying Agent to a Beneficiary in the context of a LIP Policy;
+•	TRANSFER IN Events - which represent a transfer of money towards the LIP Policy;
+•	TRANSFER OUT Events - which represent a transfer of money outwards the LIP Policy but that is not as such an OUT Event;
+•	OTHER Events - which may represent various kinds of events that are not covered by IN, OUT, TRANSFER In, TRANSFER OUT or YIELD events;
+•	YIELD Events - which represent yield-related events (e.g. increase of the Policy Capital Value during a specific tax year).</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Contribution">
+				<xs:annotation>
+					<xs:documentation>Contribution (represents the contribution paid by the Payer of Premiums to the LIP Policy)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OtherUnspecifiedIn">
+				<xs:annotation>
+					<xs:documentation>Other / Unspecified</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Annuity">
+				<xs:annotation>
+					<xs:documentation>Annuity (a payment made by the Insurer/Paying Agent to the Beneficiary at regular interval)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="LumpSumAtMaturity">
+				<xs:annotation>
+					<xs:documentation>Lump sum at maturity (Investment policies are fixed term. That term could be reached (Maturity))</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Death">
+				<xs:annotation>
+					<xs:documentation>Death (Death could happen and lead to a payment)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Disability">
+				<xs:annotation>
+					<xs:documentation>Disability (Disability could happen and lead to a payment)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Illness">
+				<xs:annotation>
+					<xs:documentation>Illness (Illness could happen and lead to a payment)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SurrenderOfRightsRepayment">
+				<xs:annotation>
+					<xs:documentation>Surrender of rights / Repayment (The Policy Owner decides to abandon its rights to a LIP and receives the total amount of contributions that were already paid to the Insurer/Paying Agent or asks the Insurer/Paying Agent to repay (partially) the amount of contributions that were already paid)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OtherUnspecifiedOut">
+				<xs:annotation>
+					<xs:documentation>Other / Unspecified</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TransferInScheme">
+				<xs:annotation>
+					<xs:documentation>Scheme (represents a transfer made within the same Policy (e.g. from a fund to another one))</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TransferInNational">
+				<xs:annotation>
+					<xs:documentation>National (represents a transfer made from a Policy to another Policy located within the same country (from the new Policy point-of-view))</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TransferInInternational">
+				<xs:annotation>
+					<xs:documentation>International (represents a transfer made from a Policy to another Policy located within another country (from the new Policy point-of-view))</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TransferInOtherUnspecified">
+				<xs:annotation>
+					<xs:documentation>Other / Unspecified</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TransferOutScheme">
+				<xs:annotation>
+					<xs:documentation>Scheme (represents a transfer made within the same Policy (e.g. from a fund to another one))</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TransferOutNational">
+				<xs:annotation>
+					<xs:documentation>National (represents a transfer made from a Policy to another Policy located within the same country (from the old Policy point-of-view))</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TransferOutInternational">
+				<xs:annotation>
+					<xs:documentation>International (represents a transfer made from a Policy to another Policy located within another country (from the old Policy point-of-view))</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TransferOutOtherUnspecified">
+				<xs:annotation>
+					<xs:documentation>Other / Unspecified</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CollateralPledge">
+				<xs:annotation>
+					<xs:documentation>Collateral/Pledge (represents the fact that the Policy is used as a Collateral (e.g. in the context of a Mortgage))</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="AdvanceIn">
+				<xs:annotation>
+					<xs:documentation>Advance In (represents the reimbursement made by the Beneficiary after having received an advance)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="AdvanceOut">
+				<xs:annotation>
+					<xs:documentation>Advance Out (represents an advance made to the Beneficiary)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="RefundOfPremiums">
+				<xs:annotation>
+					<xs:documentation>Refund of premiums (This value will be used to cover "cooling off periods" which allows Policy Owners to cancel the Policy within a certain period of time and receives back the premiums he/she has already paid)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="AcceptanceByTheBeneficiary">
+				<xs:annotation>
+					<xs:documentation>Acceptance by the Beneficiary (represents the decision by the Beneficiary to accept a Policy granted to him/her (in whatever way) by the Policy Owner)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OtherOtherUnspecified">
+				<xs:annotation>
+					<xs:documentation>Other / Unspecified</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Yield">
+				<xs:annotation>
+					<xs:documentation>Yield (represents the income generated during the tax year by the LIP (this income or its notional value may be taxable in various countries on a yearly basis))</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OtherYield">
+				<xs:annotation>
+					<xs:documentation>Other / Unspecified</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="LIPS-110_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics for LIPS-110 - Policy Overall Statistics.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MSG_ID" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element defines the identification number for the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_REF" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the reference of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_DATE" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the date of sending of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_ORIGINATING_COUNTRY" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the MS sending the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_DESTINATION_COUNTRY" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the MS receiving the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_TYPE_INDIC" type="cms:MsgTypeIndic_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes if the element is an Initial or a Correction message. This field can take one of the following values:
+•	1 for an Initial message;
+•	2 for a Correction message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_APPLICATION_ID" type="MsgApplicationIdLIP_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the category of income and capital. This field can only take the value "AEOI-LIP".</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_TAX_YEAR" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the tax year of the initial or correction message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="POLICY_TYPE" type="PolicyType_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Type of Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EUSD_INDICATOR" type="xs:boolean" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the EUSD Indicator. It can be either 1 or 0.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BENEFICIARY_ABSOLUTE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Named Beneficiaries of "Absolute Entitlement" type per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BENEFICIARY_ON_BEHALF_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Named Beneficiaries of "On Behalf" type per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BENEFICIARY_ULTIMATE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Named Beneficiaries of "Ultimate Beneficial Owner" type per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BENEFICIARY_UNKNOWN_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Named Beneficiaries of "Unknown" type per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BENEFICIARY_CLASS_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Class Beneficiaries per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="INSURER_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Insurers per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OWNER_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Owners per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PAYER_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Payers of Premiums per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIFE_INSURED_NAMED_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Named Life Insured per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIFE_INSURED_CLASS_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Class Life Insured per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="POLICY_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Total number of Policies in the current group.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CAPITAL_VALUE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Policy Capital Values per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CAPITAL_VALUE_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Total number of Policy Capital Values in the current group.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CAPITAL_VALUE_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the sum of the average amounts per Policy of the Policy Capital Values (converted to Euro where needed) in the current groups.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Events per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Total number of Events in the current group.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Amounts in Event Info across Events per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total number of Amounts in Event Info across Events in the current group.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total value, in Euro, of the Event Info amounts in the current group.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_EXISTENCE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info for which only existence is known per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_EXISTENCE_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total number of Event Info for which only existence is known in the current group.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Amounts in Tax Info across Events per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total number of Amounts in Tax Info across Events in the current group.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total value, in Euro, of the Tax Info amounts in the current group.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info for which only existence is known per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total number of Tax Info for which only existence is known in the current group.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="LIPS-120_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics for LIPS-120 - Event Statistics.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MSG_ID" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element defines the identification number for the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_REF" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the reference of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_DATE" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the date of sending of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_ORIGINATING_COUNTRY" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the MS sending the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_DESTINATION_COUNTRY" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the MS receiving the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_TYPE_INDIC" type="cms:MsgTypeIndic_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes if the element is an Initial or a Correction message. This field can take one of the following values:
+•	1 for an Initial message;
+•	2 for a Correction message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_APPLICATION_ID" type="MsgApplicationIdLIP_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the category of income and capital. This field can only take the value "AEOI-LIP".</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_TAX_YEAR" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the tax year of the initial or correction message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="POLICY_TYPE" type="PolicyType_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Type of Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EUSD_INDICATOR" type="xs:boolean" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the EUSD Indicator. It can be either 1 or 0.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BENEFICIARY_ABSOLUTE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Named Beneficiaries of "Absolute Entitlement" type per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BENEFICIARY_ON_BEHALF_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Named Beneficiaries of "On Behalf" type per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BENEFICIARY_ULTIMATE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Named Beneficiaries of "Ultimate Beneficial Owner" type per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BENEFICIARY_UNKNOWN_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Named Beneficiaries of "Unknown" type per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BENEFICIARY_CLASS_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Class Beneficiaries per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="INSURER_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Insurers per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OWNER_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Owners per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PAYER_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Payers of Premiums per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIFE_INSURED_NAMED_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Named Life Insured per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIFE_INSURED_CLASS_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Class Life Insured per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_TYPE" type="EventType_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Type of Event.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Total number of Events in the current group.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Amounts in Event Info across Events per Policy.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total number of Amounts in Event Info across Events in the current group.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total value, in Euro, of the Event Info amounts in the current group.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_EXISTENCE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info for which only existence is known per Event.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_EXISTENCE_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total number of Event Info for which only existence is known in the current group.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Total number of Tax Info for which an Amount is provided across Events in the current group.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_RELIEF_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total value, in Euro, of the Tax Info amounts in the current group and for which the Tax type is equal to "Tax Relief or Deduction".</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_IN_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total value, in Euro, of the Tax Info amounts in the current group and for which the Tax type is equal to "Payment In" or "Transfer In".</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_OUT_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total value, in Euro, of the Tax Info amounts in the current group and for which the Tax type is equal to "Payment Out" or "Transfer Out".</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_YIELD_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total value, in Euro, of the Tax Info amounts in the current group and for which the Tax type is equal to "Yield Tax / Capital Tax".</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_OTHER_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total value, in Euro, of the Tax Info amounts in the current group and for which the Tax type is equal to "Other / Unspecified".</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_RELIEF_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total number of Total number of Tax Info for which only existence is known in the current group and for which the Tax type is equal to ""Tax Relief or Deduction".</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_IN_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total number of Total number of Tax Info for which only existence is known in the current group and for which the Tax type is equal to "Payment In" or "Transfer In".</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_OUT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total number of Total number of Tax Info for which only existence is known in the current group and for which the Tax type is equal to "Payment Out" or "Transfer Out".</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_YIELD_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total number of Total number of Tax Info for which only existence is known in the current group and for which the Tax type is equal to "Yield Tax / Capital Tax".</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_OTHER_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total number of Total number of Tax Info for which only existence is known in the current group and for which the Tax type is equal to "Other / Unspecified".</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Records_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics related to the LIP category of income and capital.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="LIPS-110" type="LIPS-110_Type" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The LIPS-110 query result set presents how Policies were identified in terms of type and EUSD indicator. It also presents the number of Policies per message as well as, for each line, the number of:
+•	Beneficiaries (per type of Beneficiary);
+•	Insurers;
+•	Owners;
+•	Payers of Premiums;
+•	Life Insured (per type of Life Insured);
+•	Policy Capital Values (with the value of the sum of the Policy Capital Values);
+•	Events;
+•	Event Info for which a financial info is known (with the value of the sum of the Event Info for which a financial info is known);
+•	Event Info for which only existence is known;
+•	Tax Info for which a financial info is known (with the value of the sum of the Tax Info for which a financial info is known);
+•	Tax Info for which only existence is known.
+This query defines how Events are distributed across the various Policies and their associated Persons, and provides quantitative information on these Events.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LIPS-120" type="LIPS-120_Type" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>The LIPS-120 query result set presents how Events were identified in terms of Policy type, EUSD indicator and Event type. It also presents the number of Events per message as well as, for each line, the number of:
+•	Beneficiaries (per type of Beneficiary);
+•	Insurers;
+•	Owners;
+•	Payers of Premiums;
+•	Life Insured (per type of Life Insured);
+•	Event Info for which a financial info is known (with the value of the sum of the Event Info for which a financial info is known);
+•	Event Info for which only existence is known;
+•	Tax Info for which a financial info is known (with the value of the sum of the Tax Info for which a financial info is known), split per LIP Tax;
+•	Tax Info for which only existence is known, split per LIP Tax.
+This query defines how Amounts are distributed across the various Events, and provides qualitative and quantitative information on these Events.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- MsgApplicationIdLIP_Type -->
+	<xs:simpleType name="MsgApplicationIdLIP_Type">
+		<xs:annotation>
+			<xs:documentation>This element describes the category of income and capital. This field is always equal to "AEOI-LIP" in this query.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="AEOI-LIP"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- PolicyType_Type -->
+	<xs:simpleType name="PolicyType_Type">
+		<xs:annotation>
+			<xs:documentation>This data type refers to the type of LIP Policy.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="PureRisk">
+				<xs:annotation>
+					<xs:documentation>Pure Risk (only purpose is life insurance)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Other">
+				<xs:annotation>
+					<xs:documentation>Other (for example, an Investment Policy, i.e. capital product with a fixed maturity)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Unknown">
+				<xs:annotation>
+					<xs:documentation>Unknown</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

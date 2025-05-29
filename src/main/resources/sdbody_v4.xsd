@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:dtm="urn:cec.eu.int:taxud:directtax:v4" xmlns:sd="urn:cec.eu.int:taxud:directtax:eusd:v4" xmlns:stf="urn:oecd:ties:stf:v2" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns1="urn:cec.eu.int:taxud:directtax:v4" targetNamespace="urn:cec.eu.int:taxud:directtax:eusd:v4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="4.0">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="en">
+		=== HISTORY===
+		- Version 1.0: first issue of the schema as part of the Technical Specifications.
+		- Version 2.0: second issue, after MS review of the Technical Specifications
+		- Version 2.1: third issue, after furthe MS review
+			- In ReqElements_Type, change type of ExpectedEntity element to EntityParty_Type (was CorrectableEntityParty_Type)
+		- Version 3.0: Split the correction information into spontaneous (SpontaneousCorrectionElements) and on demand elements (CorrectionResponseElements)
+		- Version 4.0: Alignment of versions in the scope of RfA 09-592.
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:include schemaLocation="sdtypes_v4.xsd"/>
+	<xsd:include schemaLocation="stfmodifiedtypes_v4.xsd"/>
+	<xsd:import namespace="urn:oecd:ties:stf:v2" schemaLocation="stftypes-2.0.xsd"/>
+	<xsd:import namespace="urn:cec.eu.int:taxud:directtax:v4" schemaLocation="directtax_v4.xsd"/>
+	<xsd:complexType name="CorrectedBeneficialOwner_Type">
+		<xsd:complexContent>
+			<xsd:extension base="sd:CorrectableBOParty_Type">
+				<xsd:sequence>
+					<xsd:element name="PayingAgentDocRefId" type="dtm:UID_Type" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="CorrectedArt4_2PaymentData_Type">
+		<xsd:complexContent>
+			<xsd:extension base="sd:CorrectableArt4_2PaymentData_Type">
+				<xsd:sequence>
+					<xsd:element name="EntityDocRefId" type="dtm:UID_Type" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="CorrectedArt9PaymentData_Type">
+		<xsd:complexContent>
+			<xsd:extension base="sd:CorrectableArt9PaymentData_Type">
+				<xsd:sequence>
+					<xsd:element name="BeneficialOwnerDocRefId" type="dtm:UID_Type" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="ReqElements_Type">
+		<xsd:sequence>
+			<xsd:element name="DocRefId" type="dtm:UID_Type"/>
+			<xsd:element name="ErrorType" type="xsd:integer"/>
+			<xsd:element name="Reason" type="xsd:integer"/>
+			<xsd:element name="Details" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+					<xsd:anyAttribute namespace="##any" processContents="lax"/>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:choice>
+				<xsd:element name="ExpectedEntity" type="sd:EntityParty_Type" minOccurs="0"/>
+				<xsd:element name="ExpectedArt4_2PaymentData" type="sd:Art4_2PaymentData_Type" minOccurs="0"/>
+				<xsd:element name="ExpectedPayingAgent" type="sd:PAParty_Type" minOccurs="0"/>
+				<xsd:element name="ExpectedBeneficialOwner" type="sd:BOParty_Type" minOccurs="0"/>
+				<xsd:element name="ExpectedArt9PaymentData" type="sd:Art9PaymentData_Type" minOccurs="0"/>
+			</xsd:choice>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CorrectionRequestElement_Type">
+		<xsd:sequence>
+			<xsd:element name="ReqRefId" type="dtm:UID_Type"/>
+			<xsd:element name="ReqTypeIndic" type="sd:DocTypeIndic_Type"/>
+			<xsd:element name="ReqElements" type="sd:ReqElements_Type" minOccurs="0"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:element name="RequestRejection" type="sd:RequestRejection_Type"/>
+	<xsd:complexType name="DataBody_Type">
+		<xsd:complexContent>
+			<xsd:restriction base="dtm:Body_Type">
+				<xsd:sequence>
+					<xsd:element ref="sd:InitialElements" minOccurs="0"/>
+					<xsd:element ref="sd:SpontaneousCorrectionElements" minOccurs="0"/>
+					<xsd:element ref="sd:CorrectionResponseElements" minOccurs="0"/>
+				</xsd:sequence>
+				<xsd:attribute name="applicationId" type="xsd:string" use="required" fixed="DIRECTIVE 2003/48/EC"/>
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:element name="InitialElements">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Article4_2" type="sd:EntityInfo_Type" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="Article9" type="sd:Article9_Type" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		<xsd:key name="InitialDocRefId_Key">
+			<xsd:selector xpath=".//sd:DocSpec"/>
+			<xsd:field xpath="sd:DocRefId"/>
+		</xsd:key>
+	</xsd:element>
+	<xsd:element name="SpontaneousCorrectionElements">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Cancellation" type="sd:CancellationDocSpec_Type" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="CorrectedEntity" type="sd:CorrectableEntityParty_Type" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="CorrectedArt4_2PaymentData" type="sd:CorrectedArt4_2PaymentData_Type" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="CorrectedPayingAgent" type="sd:CorrectablePAParty_Type" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="CorrectedBeneficialOwner" type="sd:CorrectedBeneficialOwner_Type" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="CorrectedArt9PaymentData" type="sd:CorrectedArt9PaymentData_Type" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		<xsd:key name="SpontaneousDocRefId_Key">
+			<xsd:selector xpath="sd:Cancellation|.//sd:DocSpec"/>
+			<xsd:field xpath="sd:DocRefId"/>
+		</xsd:key>
+	</xsd:element>
+	<xsd:element name="CorrectionResponseElements">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="sd:RequestRejection" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element ref="sd:CorrectedElement" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		<xsd:key name="CorrectedReqRefId_Key">
+			<xsd:selector xpath=".//sd:CorrectedElement|.//sd:RequestRejection"/>
+			<xsd:field xpath="sd:ReqRefId"/>
+		</xsd:key>
+	</xsd:element>
+	<xsd:element name="CorrectedElement">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ReqRefId" type="dtm:UID_Type"/>
+				<xsd:element name="Cancellation" type="sd:CancellationDocSpec_Type" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="CorrectedEntity" type="sd:CorrectableEntityParty_Type" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="CorrectedArt4_2PaymentData" type="sd:CorrectedArt4_2PaymentData_Type" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="CorrectedPayingAgent" type="sd:CorrectablePAParty_Type" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="CorrectedBeneficialOwner" type="sd:CorrectedBeneficialOwner_Type" minOccurs="0" maxOccurs="unbounded"/>
+				<xsd:element name="CorrectedArt9PaymentData" type="sd:CorrectedArt9PaymentData_Type" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		<xsd:key name="CorrectedDocRefId_Key">
+			<xsd:selector xpath="sd:Cancellation|.//sd:DocSpec"/>
+			<xsd:field xpath="sd:DocRefId"/>
+		</xsd:key>
+	</xsd:element>
+	<xsd:element name="CorrRequestElements">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="CorrRequestElement" type="sd:CorrectionRequestElement_Type" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+		<xsd:key name="ReqRefId_Key">
+			<xsd:selector xpath=".//sd:CorrRequestElement"/>
+			<xsd:field xpath="sd:ReqRefId"/>
+		</xsd:key>
+	</xsd:element>
+	<xsd:element name="RejectionElement">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="ErrorType" type="xsd:integer"/>
+				<xsd:element name="Reason" type="xsd:integer" minOccurs="0"/>
+				<xsd:choice minOccurs="0">
+					<xsd:element name="ReqRefId" type="dtm:UID_Type"/>
+					<xsd:element name="DocRefId" type="dtm:UID_Type"/>
+				</xsd:choice>
+				<xsd:element name="Details" type="xsd:string" minOccurs="0"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="RequestRejection_Type">
+		<xsd:sequence>
+			<xsd:element name="ReqRefId" type="dtm:UID_Type"/>
+			<xsd:element name="Reason" type="xsd:integer"/>
+			<xsd:element name="Details" minOccurs="0">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="CorrRequestBody_Type">
+		<xsd:complexContent>
+			<xsd:restriction base="dtm:Body_Type">
+				<xsd:sequence>
+					<xsd:element ref="sd:CorrRequestElements"/>
+				</xsd:sequence>
+				<xsd:attribute name="applicationId" type="xsd:string" use="required" fixed="DIRECTIVE 2003/48/EC -- CORR REQUEST"/>
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+	<xsd:complexType name="RejectionBody_Type">
+		<xsd:complexContent>
+			<xsd:restriction base="dtm:Body_Type">
+				<xsd:sequence>
+					<xsd:element ref="sd:RejectionElement" maxOccurs="unbounded"/>
+				</xsd:sequence>
+				<xsd:attribute name="applicationId" type="xsd:string" use="required" fixed="DIRECTIVE 2003/48/EC -- REJECTION"/>
+			</xsd:restriction>
+		</xsd:complexContent>
+	</xsd:complexType>
+</xsd:schema>

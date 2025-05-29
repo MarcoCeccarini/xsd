@@ -1,0 +1,1292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:ec.europa.eu:taxud:directtax:aeoi:v1" xmlns:aeoi="urn:ec.europa.eu:taxud:directtax:aeoi:v1" xmlns:cm="urn:ec.europa.eu:taxud:directtax:aeoi:common:v2" xmlns:cms="urn:ec.europa.eu:taxud:directtax:aeoi:common_statistics:v2" xmlns:co="urn:oecd:ties:stf:v2" xmlns:dt="urn:cec.eu.int:taxud:directtax:v4" xmlns:stfm="urn:cec.eu.int:taxud:directtax:eusd:v4" targetNamespace="urn:ec.europa.eu:taxud:directtax:aeoi:v1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!--HISTORY	
+	20/08/2024 - "Unknown" option introduced in SchemeType_Type enumeration to be selected when information is not available    
+	15/12/2023 - Enforce mandatory fields: minOccurs=0 => minOccurs=1
+	22/05/2023 - DAC1-608: Align discrepancies in boolean definitions between DAC1, DAC2 and DAC1-DAC2-Stats 
+		             DAC1-603: Align discrepancies in enum definitions between DAC1, DAC2 and DAC1-DAC2-Stats
+	-->
+	<xs:import namespace="urn:ec.europa.eu:taxud:directtax:aeoi:common:v2" schemaLocation="commontypes_v2.xsd"/>
+	<xs:import namespace="urn:ec.europa.eu:taxud:directtax:aeoi:common_statistics:v2" schemaLocation="commontypes_statistics.xsd"/>
+	<xs:import namespace="urn:oecd:ties:stf:v2" schemaLocation="oecdtypes_v2.xsd"/>
+	<xs:import namespace="urn:cec.eu.int:taxud:directtax:v4" schemaLocation="directtax_v4.xsd"/>
+	<xs:import namespace="urn:cec.eu.int:taxud:directtax:eusd:v4" schemaLocation="stfmodifiedtypes_v4.xsd"/>
+
+	<!-- DAC1_Statistics -->
+	<xs:element name="DAC1_Statistics">
+		<xs:annotation>
+			<xs:documentation>This is the root element of the statistics on Initial and Correction messages.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" type="cms:Header">
+					<xs:annotation>
+						<xs:documentation>This element represents the header of the message, containing its general information.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:sequence>
+					<xs:element name="records" type="Records_Type" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>This element represents the statistics related to the PEN category of income and capital. It is equivalent to the Microsoft Excel file defined in the AEOI DAC1 FS for the PEN category statistics.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:sequence>
+			<xs:attribute name="version" type="xs:decimal" use="required">
+				<xs:annotation>
+					<xs:documentation>Identification of the XSD version being used.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- EventType_Type -->
+	<xs:simpleType name="EventType_Type">
+		<xs:annotation>
+			<xs:documentation>PEN Event Type is divided into:
+•	IN Events - which are funding the Pension Scheme;
+•	OUT Events - which represent payments made by a Payer to a Recipient in the context of a Pension Scheme;
+•	TRANSFER IN Events - which represent the inward transfer of money between two Pension Schemes;
+•	TRANSFER OUT Events - which represent the outward transfer of money between two Pension Schemes;
+•	OTHER Events - which may represent various kinds of events that are not covered by IN, OUT, TRANSFER IN, TRANSFER OUT or YIELD events;
+•	YIELD Events - which represent yield-related events (e.g. income generated during the tax year by the pension scheme).</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="ContributionEmployer">
+				<xs:annotation>
+					<xs:documentation>Contribution - Employer (represents the contribution paid by the Employer to the Pension Scheme)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ContributionIndividual">
+				<xs:annotation>
+					<xs:documentation>Contribution - Individual (represents the contribution paid by the Individual to the Pension Scheme)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ContributionThirdParty">
+				<xs:annotation>
+					<xs:documentation>Contribution - Third Party (represents the contribution paid by a Third Party to the Pension Scheme)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DirectedTerminationPayment">
+				<xs:annotation>
+					<xs:documentation>Directed Termination Payment (paid to the Pension Scheme upon termination of a relationship, i.e. this value tackles specifically the case where the -severance- indemnities are paid to a pension scheme further to the dismissal or resignation agreement between the employer and the employee)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OtherIn">
+				<xs:annotation>
+					<xs:documentation>Other / Unspecified</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="NormalPayment">
+				<xs:annotation>
+					<xs:documentation>Normal Payment (represents a normal payment made by the Payer to the Recipient in the context of a Pension Scheme)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="BuybackNoCondition">
+				<xs:annotation>
+					<xs:documentation>Buyback - No Condition (represents the case where the Recipient decided to buyback his/her Pension Scheme before its term)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="BuybackDisabilityTerminalMedicalCondition">
+				<xs:annotation>
+					<xs:documentation>Buyback - Disability or Terminal Medical Condition (represents the case where the Recipient decided to buyback his/her Pension Scheme because of a sickness or terminal medical condition)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="BuybackOtherExceptionalConditionsOfRelease">
+				<xs:annotation>
+					<xs:documentation>Buyback - Other Exceptional Conditions of Release (represents the case where the Recipient decided to buyback his/her Pension Scheme because of other exceptional conditions of release)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OtherOut">
+				<xs:annotation>
+					<xs:documentation>Other / Unspecified</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TransferInScheme">
+				<xs:annotation>
+					<xs:documentation>Scheme (represents a transfer made between two different Schemes within a Payer)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TransferInNational">
+				<xs:annotation>
+					<xs:documentation>National (represents a transfer between two different Payers in the same country)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TransferInInternational">
+				<xs:annotation>
+					<xs:documentation>International (represents a transfer made from a Pension Scheme to another Pension Scheme located within another country (from the old Pension Scheme point-of-view))</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OtherTransferIn">
+				<xs:annotation>
+					<xs:documentation>Other / Unspecified</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TransferOutScheme">
+				<xs:annotation>
+					<xs:documentation>Scheme (represents a transfer made between two different Schemes within a Payer)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TransferOutNational">
+				<xs:annotation>
+					<xs:documentation>National (represents a transfer between two different Payers in the same country)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="TransferOutInternational">
+				<xs:annotation>
+					<xs:documentation>International (represents a transfer made from a Pension Scheme to another Pension Scheme located within another country (from the old Pension Scheme point-of-view))</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OtherTransferOut">
+				<xs:annotation>
+					<xs:documentation>Other / Unspecified</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Collateral">
+				<xs:annotation>
+					<xs:documentation>Collateral (represents the fact that the Pension Scheme is used as Collateral (e.g. in the context of a Mortgage))</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="AdvanceIn">
+				<xs:annotation>
+					<xs:documentation>Advance In (represents the reimbursement made by the Recipient after having received an advance)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="AdvanceOut">
+				<xs:annotation>
+					<xs:documentation>Advance Out (represents an advance made to the Recipient)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Payback">
+				<xs:annotation>
+					<xs:documentation>Payback (represents the amount paid back by a Person to the Pension Scheme, whether voluntarily or for legal or any other reasons)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Adjustment">
+				<xs:annotation>
+					<xs:documentation>Adjustment (represents "technical adjustments". Technical adjustments are operations specific to Pension Schemes that could modify the Pension Schemes. These changes could be subject to taxation and might need to be reported)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OtherOtherUnspecified">
+				<xs:annotation>
+					<xs:documentation>Other / Unspecified</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Yield">
+				<xs:annotation>
+					<xs:documentation>Yield (represents the income generated during the tax year by the pension scheme (this income or its notional value may be taxable in various countries on a yearly basis))</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OtherYield">
+				<xs:annotation>
+					<xs:documentation>Other / Unspecified</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="PENS-110_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics for PENS-110 - Recipient Statistics.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MSG_ID" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element defines the identification number for the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_REF" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the reference of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_DATE" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the date of sending of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_ORIGINATING_COUNTRY" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the MS sending the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_DESTINATION_COUNTRY" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the MS receiving the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_TYPE_INDIC" type="cms:MsgTypeIndic_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes if the element is an Initial or a Correction message. This field can take one of the following values:
+•	1 for an Initial message;
+•	2 for a Correction message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_APPLICATION_ID" type="MsgApplicationIdPEN_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the category of income and capital. This field can only take the value "AEOI-PEN".</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_TAX_YEAR" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the tax year of the initial or correction message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IS_NP" type="xs:boolean" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the type of person. This field can either:
+•	Be 1 - The Person is a Natural Person;
+•	Be 0 - The Person is a Non-Natural Person.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_TIN_IS_RR" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of TIN emitted by the RR with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with a TIN emitted by the RR;
+•	Or amount to N - The Person was associated with N TIN(s) emitted by the RR.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_TIN_ISNT_RR" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of TIN emitted by another MS than the RR with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with TIN emitted by another MS than the RR or without information on the emitter;
+•	Or amount to N - The Person was associated with N TIN(s) emitted by another MS than the RR or without information on the emitter.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_SSN_IS_RR" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of social security numbers emitted by the RR with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with a social security number emitted by the RR;
+•	Or amount to N - The Person was associated with N social security number(s) emitted by the RR.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_SSN_ISNT_RR" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of social security numbers emitted by another MS than the RR, or without information regarding the emitter, with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with social security number emitted by another MS than the RR or without information on the emitter;
+•	Or amount to N - The Person was associated with N social security number(s) emitted by another MS than the RR or without information on the emitter.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_VAT" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of VAT Identification Numbers with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with a VAT number;
+•	Or amount to N - The Person was associated with N VAT number(s).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_OTHER" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of other types of identifier indicator with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with another identifier;
+•	Or amount to N - The Person was associated with N other identifier(s).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_NO_TYPE" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of other identifier(s) for which no explicit type is provided with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with an identifier for which no explicit type is provided;
+•	Or amount to N - The Person was associated with N identifiers for which no explicit type is provided.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_NAME_STRUCT" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of structured names with which the Recipient is associated. This field can either:
+•	Be equal to 0 - The Recipient was not associated with any structured name;
+•	Or amount to N - The Recipient was associated with N structured names.
+</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_NAME_FREE" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of free names with which the Recipient is associated. This field can either:
+•	Be equal to 0 - The Recipient was not associated with any free name;
+•	Or amount to N - The Recipient was associated with N free names.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_BIRTH_DATE" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of birth dates with which the Recipient is associated. This field can either:
+•	Be equal to 0 - The Recipient was not associated with any birthdate;
+•	Or amount N - The Recipient was associated with N birthdates.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ADDRESS_STRUCT" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of structured addresses with which the Recipient is associated. This field can either:
+•	Be equal to 0 - The Recipient was not associated with any structured address;
+•	Or amount to N - The Recipient was associated with N structured addresses.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ADDRESS_FREE" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of free addresses with which the Recipient is associated. This field can either:
+•	Be equal to 0 - The Recipient was not associated with any free address;
+•	Or amount to N - The Recipient was associated with N free addresses.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RECIPIENT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Recipients per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SCHEME_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Schemes per Recipient within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SCHEME_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Schemes per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Events per Recipient within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info, for which a Financial Info is known, per Recipient within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info, for which a Financial Info is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the Event Info, for which a Financial Info is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_EXISTENCE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info, for which only existence is known, per Recipient within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_EXISTENCE_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info, for which only existence is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info, for which a Financial Info is known, per Recipient within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info, for which a Financial Info is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the Tax Info, for which a Financial Info is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info, for which only existence is known, per Recipient within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info, for which only existence is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CAPITAL_VALUE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Scheme Capital Values per Recipient within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CAPITAL_VALUE_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Scheme Capital Values per message</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CAPITAL_VALUE_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the Scheme Capital Values per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PENS-120_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics for PENS-120 - Payer Statistics.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MSG_ORIGINATING_COUNTRY" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the MS sending the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_APPLICATION_ID" type="MsgApplicationIdPEN_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the category of income and capital. This field can only take the value "AEOI-PEN".</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_TAX_YEAR" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the tax year of the initial or correction message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IS_NP" type="xs:boolean" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the type of person. This field can either:
+•	Be 1 - The Person is a Natural Person;
+•	Be 0 - The Person is a Non-Natural Person.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_TIN_IS_SS" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of TIN emitted by the SS with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with a TIN emitted by the SS;
+•	Or amount to N - The Person was associated with N TIN(s) emitted by the SS.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_TIN_ISNT_SS" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of TIN emitted by another MS than the SS with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with TIN emitted by another MS than the SS or without information on the emitter;
+•	Or amount to N - The Person was associated with N TIN(s) emitted by another MS than the SS or without information on the emitter.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_SSN_IS_SS" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of social security numbers emitted by the SS with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with a social security number emitted by the SS;
+•	Or amount to N - The Person was associated with N social security number(s) emitted by the SS.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_SSN_ISNT_SS" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of social security numbers emitted by another MS than the SS or without information regarding the emitter, with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with social security number emitted by another MS than the SS or without information on the emitter;
+•	Or amount to N - The Person was associated with N social security number(s) emitted by another MS than the SS or without information on the emitter.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_VAT" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of VAT Identification Numbers with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with a VAT number;
+•	Or amount to N - The Person was associated with N VAT number(s).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_OTHER" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of other types of identifier indicator with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with another identifier;
+•	Or amount to N - The Person was associated with N other identifier(s).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_NO_TYPE" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of other identifier(s) for which no explicit type is provided with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with an identifier for which no explicit type is provided;
+•	Or amount to N - The Person was associated with N identifiers for which no explicit type is provided.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PAYER_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Payers per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SCHEME_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Schemes per Payer within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SCHEME_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Schemes per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Events per Payer within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info, for which a Financial Info is known, per Payer within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info, for which a Financial Info is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the Event Info, for which a Financial Info is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_EXISTENCE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info, for which only existence is known, per Payer within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_EXISTENCE_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info, for which only existence is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info, for which a Financial Info is known, per Payer within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info, for which a Financial Info is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the Tax Info, for which a Financial Info is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info, for which only existence is known, per Payer within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info, for which only existence is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CAPITAL_VALUE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Scheme Capital Values per Payer within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CAPITAL_VALUE_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Scheme Capital Values per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CAPITAL_VALUE_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the Scheme Capital Values per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PENS-130_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics for PENS-130 - Scheme Statistics.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MSG_ID" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element defines the identification number for the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_REF" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the reference of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_DATE" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the date of sending of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_ORIGINATING_COUNTRY" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the MS sending the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_DESTINATION_COUNTRY" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the MS receiving the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_TYPE_INDIC" type="cms:MsgTypeIndic_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes if the element is an Initial or a Correction message. This field can take one of the following values:
+•	1 for an Initial message;
+•	2 for a Correction message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_APPLICATION_ID" type="MsgApplicationIdPEN_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the category of income and capital. This field can only take the value "AEOI-PEN".</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_TAX_YEAR" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the tax year of the initial or correction message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IS_NP" type="xs:boolean" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the type of person. This field can either:
+•	Be 1 - The Person is a Natural Person;
+•	Be 0 - The Person is a Non-Natural Person.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_TIN_IS_RR" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of TIN emitted by the RR with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with a TIN emitted by the RR;
+•	Or amount to N - The Person was associated with N TIN(s) emitted by the RR.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_TIN_ISNT_RR" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of TIN emitted by another MS than the RR with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with TIN emitted by another MS than the RR or without information on the emitter;
+•	Or amount to N - The Person was associated with N TIN(s) emitted by another MS than the RR or without information on the emitter.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_SSN_IS_RR" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of social security numbers emitted by the RR with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with a social security number emitted by the RR;
+•	Or amount to N - The Person was associated with N social security number(s) emitted by the RR.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_SSN_ISNT_RR" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of social security numbers emitted by another MS than the RR, or without information regarding the emitter, with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with social security number emitted by another MS than the RR or without information on the emitter;
+•	Or amount to N - The Person was associated with N social security number(s) emitted by another MS than the RR or without information on the emitter.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_VAT" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of VAT Identification Numbers with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with a VAT number;
+•	Or amount to N - The Person was associated with N VAT number(s).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_OTHER" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of other types of identifier indicator with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with another identifier;
+•	Or amount to N - The Person was associated with N other identifier(s).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_NO_TYPE" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of other identifier(s) for which no explicit type is provided with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with an identifier for which no explicit type is provided;
+•	Or amount to N - The Person was associated with N identifiers for which no explicit type is provided.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_NAME_STRUCT" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of structured names with which the Recipient is associated. This field can either:
+•	Be equal to 0 - The Recipient was not associated with any structured name;
+•	Or amount to N - The Recipient was associated with N structured names.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_NAME_FREE" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of free names with which the Recipient is associated. This field can either:
+•	Be equal to 0 - The Recipient was not associated with any free name;
+•	Or amount to N - The Recipient was associated with N free names.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_BIRTH_DATE" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of birth dates with which the Recipient is associated. This field can either:
+•	Be equal to 0 - The Recipient was not associated with any birthdate;
+•	Or amount N - The Recipient was associated with N birthdates.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ADDRESS_STRUCT" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of structured addresses with which the Recipient is associated. This field can either:
+•	Be equal to 0 - The Recipient was not associated with any structured address;
+•	Or amount to N - The Recipient was associated with N structured addresses.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ADDRESS_FREE" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of free addresses with which the Recipient is associated. This field can either:
+•	Be equal to 0 - The Recipient was not associated with any free address;
+•	Or amount to N - The Recipient was associated with N free addresses.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ADMIN_EXIST" type="xs:boolean" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number Administrator managing the scheme. This field can either:
+•	Be 1 - An administrator manages the Scheme;
+•	Be 0 - No administrator manages the Scheme.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SCHEME_NATURE" type="SchemeNature_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Nature of the Schema.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FOREIGN_APPROVED_SCHEME" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>This element describes the Foreign approval of the Scheme. This field can either:
+•	Be 1 - The foreign Scheme has been approved by the SS;
+•	Be 0 - The foreign Scheme has not been approved by the SS.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SCHEME_KIND" type="SchemeKind_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Kind of the Scheme.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SCHEME_TYPE" type="SchemeType_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Type of the Scheme.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ABSOLUTE_ENTITLEMENT_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of "Absolute Entitlement" Scheme Owners per Scheme within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ON_BEHALF_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of "On Behalf" Scheme Owners per Scheme within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BENEFICIAL_OWNER_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of "Beneficial Owner" Scheme Owners per Scheme within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SCHEME_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Schemes per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Events per Scheme within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info, for which a Financial Info is known, per Scheme within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info, for which a Financial Info is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the Event Info, for which a Financial Info is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_EXISTENCE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info, for which only existence is known, per Scheme within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_EXISTENCE_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info, for which only existence is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info, for which a Financial Info is known, per Scheme within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info, for which a Financial Info is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the Tax Info, for which a Financial Info is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info, for which only existence is known, per Scheme within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info, for which only existence is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CAPITAL_VALUE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Scheme Capital Values per Scheme within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CAPITAL_VALUE_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Scheme Capital Values per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CAPITAL_VALUE_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the Scheme Capital Values per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PENS-140_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics for PENS-140 - Income Statistics.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MSG_ID" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element defines the identification number for the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_REF" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the reference of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_DATE" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the date of sending of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_ORIGINATING_COUNTRY" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the MS sending the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_DESTINATION_COUNTRY" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the MS receiving the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_TYPE_INDIC" type="cms:MsgTypeIndic_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes if the element is an Initial or a Correction message. This field can take one of the following values:
+•	1 for an Initial message;
+•	2 for a Correction message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_APPLICATION_ID" type="MsgApplicationIdPEN_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the category of income and capital. This field can only take the value "AEOI-PEN".</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_TAX_YEAR" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the tax year of the initial or correction message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="IS_NP" type="xs:boolean" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the type of person. This field can either:
+•	Be 1 - The Person is a Natural Person;
+•	Be 0 - The Person is a Non-Natural Person.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_TIN_IS_RR" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of TIN emitted by the RR with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with a TIN emitted by the RR;
+•	Or amount to N - The Person was associated with N TIN(s) emitted by the RR.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_TIN_ISNT_RR" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of TIN emitted by another MS than the RR with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with TIN emitted by another MS than the RR or without information on the emitter;
+•	Or amount to N - The Person was associated with N TIN(s) emitted by another MS than the RR or without information on the emitter.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_SSN_IS_RR" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of social security numbers emitted by the RR with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with a social security number emitted by the RR;
+•	Or amount to N - The Person was associated with N social security number(s) emitted by the RR.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_SSN_ISNT_RR" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of social security numbers emitted by another MS than the RR, or without information regarding the emitter, with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with social security number emitted by another MS than the RR or without information on the emitter;
+•	Or amount to N - The Person was associated with N social security number(s) emitted by another MS than the RR or without information on the emitter.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_VAT" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of VAT Identification Numbers with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with a VAT number;
+•	Or amount to N - The Person was associated with N VAT number(s).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_OTHER" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of other types of identifier indicator with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with another identifier;
+•	Or amount to N - The Person was associated with N other identifier(s).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PERSON_ID_NO_TYPE" type="xs:nonNegativeInteger" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of other identifier(s) for which no explicit type is provided with which the Person is associated. This field can either:
+•	Be equal to 0 - The Person was not associated with an identifier for which no explicit type is provided;
+•	Or amount to N - The Person was associated with N identifiers for which no explicit type is provided.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ADMIN_EXIST" type="xs:boolean" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number Administrator managing the scheme. This field can either:
+•	Be 1 - An administrator manages the Scheme;
+•	Be 0 - No administrator manages the Scheme.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ABSOLUTE_ENTITLEMENT_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of "Absolute Entitlement" Scheme Owners per Scheme within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ON_BEHALF_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of "On Behalf" Scheme Owners per Scheme within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="BENEFICIAL_OWNER_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of "Beneficial Owner" Scheme Owners per Scheme within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SCHEME_NATURE" type="SchemeNature_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the nature of the Scheme.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FOREIGN_APPROVED_SCHEME" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>This element describes the Foreign approval of the Scheme. This field can either:
+•	Be 1 - The foreign Scheme has been approved by the SS;
+•	Be 0 - The foreign Scheme has not been approved by the SS.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SCHEME_KIND" type="SchemeKind_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Kind of the Scheme.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SCHEME_TYPE" type="SchemeType_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Type of the Scheme.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_TYPE" type="EventType_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Type of Event.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info per Event within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_AMOUNT_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the Event Info per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_EXISTENCE_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info, for which only existence is known, per Event within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EVENT_INFO_EXISTENCE_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Event Info, for which only existence is known, per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_RELIEF_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the "Tax Relief or Deduction" Tax Info per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_IN_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the "Payment In" and "Transfer In" Tax Info per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_OUT_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the "Payment Out" and "Transfer Out" Tax Info per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_YIELD_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the "Yield Tax/Capital Tax" Tax Info per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_AMOUNT_EXCESS_AND_OTHER_EUR" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the "Excess Contribution" or "Other/Unspecified" Tax Info per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_RELIEF_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info related to "Tax Relief or Deduction" per Event.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_IN_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info related to "Payment In" or "Transfer In" per Event.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_OUT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info related to "Payment Out" or "Transfer Out".</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_YIELD_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info related to "Yield Tax / Capital Tax" per Event.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TAX_INFO_EXISTENCE_EXCESS_AND_OTHER_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Tax Info related to "Excess Contribution" or "Other / Unspecified" per Event.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- MsgApplicationIdPEN_Type -->
+	<xs:simpleType name="MsgApplicationIdPEN_Type">
+		<xs:annotation>
+			<xs:documentation>This element describes the category of income and capital. This field is always equal to "AEOI-PEN" in this query.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="AEOI-PEN"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:complexType name="Records_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics related to the PEN category of income and capital.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:sequence>
+				<xs:element name="PENS-110" type="PENS-110_Type" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The PENS-110 query result set presents how Recipients were identified (if they were identified) in terms of TIN, social security number, VAT number, other identifier or identifier with no type but also in terms of structured/free address or structured/free name and birthdate. It also presents the number of Recipients per message as well as, for each line, the number of:
+•	Schemes;
+•	Events;
+•	Event Info for which a financial info is known (with the value of the sum of the Event Info for which a financial info is known);
+•	Event Info for which only existence is known;
+•	Tax Info for which a financial info is known (with the value of the sum of the Tax Info for which a financial info is known);
+•	Tax Info for which only existence is known;
+•	Scheme Capital Values (with the value of the sum of the average Scheme Capital Values).
+This query allows assessing the quality of the information qualifying the sent Recipients (NP or NPP). A better quality increases the probability that the tax information will be used efficiently.
+</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="PENS-120" type="PENS-120_Type" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The PENS-120 query result set presents how Payers were identified (if they were identified) in terms of TIN, social security number, VAT number, other identifier or identifier with no type. It also presents the number of Payers per message as well as, for each line, the number of:
+•	Schemes;
+•	Events;
+•	Event Info for which a financial info is known (with the value of the sum of the Event Info for which a financial info is known);
+•	Event Info for which only existence is known;
+•	Tax Info for which a financial info is known (with the value of the sum of the Tax Info for which a financial info is known);
+•	Tax Info for which only existence is known;
+•	Scheme Capital Values (with the value of the sum of the average Scheme Capital Values).
+This query allows assessing the quality of the information qualifying the sent Payers (NP or NPP). A better quality increases the probability that the tax information will be used efficiently.
+</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="PENS-130" type="PENS-130_Type" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The PENS-130 query result set presents how Schemes were identified (if they were identified) in terms of TIN, social security number, VAT number, other identifier or no identifier but also in terms of structured/free address or structured/free name and birthdate for NPs and in terms of Nature, Kind, Type, existence of an Administrator, approval or not by the SS of a foreign scheme and related Scheme Owner (number of “Absolute Entitlement”, number of “On Behalf”, number of “Beneficial Owner”). It also presents the number of Schemes per message as well as, for each line the number of:
+•	Events;
+•	Event Info for which a financial info is known (with the value of the sum of the Event Info);
+•	Event Info for which only existence is known;
+•	Tax Info for which a financial info is known (with the value of the sum of the Tax Info for which a financial info is known);
+•	Tax Info for which only existence is known;
+•	Scheme Capital Values (with the value of the sum of the average Scheme Capital Values.
+This query allows assessing the quality of the information qualifying the sent Recipients (NP or NNP) and associated Schemes. A better quality increases the probability that the tax information will be used efficiently.
+</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="PENS-140" type="PENS-140_Type" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The PENS-140 query result set presents how Incomes were identified (if they were identified) in terms of TIN, social security number, VAT number, other identifier or identifier with no type, related Schemes (Nature, Kind, Type, existence of an Administrator, approval or not by the SS of a foreign scheme), related Scheme Owner (number of “Absolute Entitlement”, number of “On Behalf”, number of “Beneficial Owner”), as well as, for each line the number of:
+•	Events;
+•	Event Info for which a financial info is known (with the value of the sum of the Event Info);
+•	Event Info for which only existence is known;
+•	Tax Info for which a financial info is known;
+•	Tax Info related to “Tax Relief or Deduction” (with the value of the sum of the Tax Info related to “Tax Relief or Deduction”);
+•	Tax Info related to “Payment In” and “Transfer In” (with the value of the sum of the Tax Info related to “Payment In” and “Transfer In”);
+•	Tax Info related to Payment Out” and “Transfer Out”(with the value of the sum of the Tax Info related to Payment Out” and “Transfer Out”);
+•	Tax Info related to “Yield Tax/Capital Tax”(with the value of the sum of the Tax Info related to “Yield Tax/Capital Tax”);
+•	Tax Info related to “Excess Contribution” or “Other/Unspecified”(with the value of the sum of the Tax Info related to “Excess Contribution” or “Other/Unspecified”).
+This query allows assessing the quality of the information qualifying the sent Recipients (NP or NNP) and associated Schemes. A better quality increases the probability that the tax information will be used efficiently.
+</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- SchemeNature_Type -->
+	<xs:simpleType name="SchemeNature_Type">
+		<xs:annotation>
+			<xs:documentation>This data type refers to the intrinsic nature of a PEN Scheme.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="SocialSecurityBenefit">
+				<xs:annotation>
+					<xs:documentation>Social Security Benefit (First pillar pensions)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OccupationalBenefit">
+				<xs:annotation>
+					<xs:documentation>Occupational Benefit (This corresponds to the second PEN pillar and concerns either one specific Natural Person or a group of Natural Persons)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OccupationalBenefitIndividual">
+				<xs:annotation>
+					<xs:documentation>Occupational Benefit Individual (This corresponds to the second PEN pillar and concerns a specific pension scheme set up for a single Natural Person in the context of an occupation (e.g. a special PEN Scheme designed for a Top Manager in a company))</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OccupationalBenefitCollective">
+				<xs:annotation>
+					<xs:documentation>Occupational Benefit Collective (This corresponds to the second PEN pillar and concerns a pension scheme established for a category of Natural Persons (e.g. a special PEN Scheme designed in a given company for all employees or a specific group of employees sharing common characteristics))</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="IndividualBenefit">
+				<xs:annotation>
+					<xs:documentation>Individual Benefit (This belongs to the third PEN pillar and concerns Natural Persons who decide on their own to subscribe for a PEN Scheme)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OtherBenefit">
+				<xs:annotation>
+					<xs:documentation>Other Benefit (e.g. war pension benefit)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Unknown">
+				<xs:annotation>
+					<xs:documentation>Unknown</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- SchemeKind_Type -->
+	<xs:simpleType name="SchemeKind_Type">
+		<xs:annotation>
+			<xs:documentation>This data type allows the SS to describe the kind of PEN Scheme.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Retirement">
+				<xs:annotation>
+					<xs:documentation>Retirement (A Retirement PEN is obtained by the Recipient after he/she reached a given age (fixed by national dispositions) and due to his/her past professional activities (either as salaried employee, self-employed person or official))</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="EarlyRetirement">
+				<xs:annotation>
+					<xs:documentation>Early Retirement (An Early Retirement PEN is obtained by the Recipient after he/she reached a given age (fixed by national dispositions) which is lower than the normal Retirement pension age (fixed by national dispositions) and due to his/her past professional activities (either as salaried employee, self-employed person or official))</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OldAgeOrGuarantee">
+				<xs:annotation>
+					<xs:documentation>Old Age / Guarantee (An Old Age/ Guarantee is obtained by the Recipient after he/she reached a given age (fixed by national dispositions). Contrary to Retirement PEN and Early Retirement, the Old Age / Guarantee is not due to the past professional activities of the Recipient)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="WidowsOrphansAndOtherDependants">
+				<xs:annotation>
+					<xs:documentation>Widows, Orphans and Other Dependants (Widows, Orphans and Other Dependants (like a Divorcee or a Separated Spouse) may be entitled to a PEN right)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Disability">
+				<xs:annotation>
+					<xs:documentation>Disability (It may happen that specific PEN are foreseen to cover Disability)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="War">
+				<xs:annotation>
+					<xs:documentation>War</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Other">
+				<xs:annotation>
+					<xs:documentation>Other</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Unknown">
+				<xs:annotation>
+					<xs:documentation>Unknown</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- SchemeType_Type -->
+	<xs:simpleType name="SchemeType_Type">
+		<xs:annotation>
+			<xs:documentation>The Scheme Type allows the SS to specify whether the PEN Scheme implies defined benefits, defined contributions or both.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="DefinedBenefits">
+				<xs:annotation>
+					<xs:documentation>Defined Benefits (i.e. the benefit is defined, whatever the contributions are over the life of the scheme. This involves a guaranteed amount of the benefit at the time of the out-payment as per a specific formula)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DefinedContributions">
+				<xs:annotation>
+					<xs:documentation>Defined Contributions (i.e. the benefit will be the result of the capitalisation of defined contributions and may vary according to the yield generated over the years. This involves no guaranteed amount at the time of the out-payment)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Mixed">
+				<xs:annotation>
+					<xs:documentation>Mixed</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Other">
+				<xs:annotation>
+					<xs:documentation>Other</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Unknown">
+				<xs:annotation>
+					<xs:documentation>Unknown</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

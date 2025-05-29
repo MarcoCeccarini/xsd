@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:ec.europa.eu:taxud:directtax:aeoi:v1" xmlns:aeoi="urn:ec.europa.eu:taxud:directtax:aeoi:v1" xmlns:cm="urn:ec.europa.eu:taxud:directtax:aeoi:common:v2" xmlns:cms="urn:ec.europa.eu:taxud:directtax:aeoi:common_statistics:v2" xmlns:co="urn:oecd:ties:stf:v2" xmlns:dt="urn:cec.eu.int:taxud:directtax:v4" xmlns:stfm="urn:cec.eu.int:taxud:directtax:eusd:v4" targetNamespace="urn:ec.europa.eu:taxud:directtax:aeoi:v1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="urn:ec.europa.eu:taxud:directtax:aeoi:common:v2" schemaLocation="commontypes_v2.xsd"/>
+	<xs:import namespace="urn:ec.europa.eu:taxud:directtax:aeoi:common_statistics:v2" schemaLocation="commontypes_statistics.xsd"/>
+	<xs:import namespace="urn:oecd:ties:stf:v2" schemaLocation="oecdtypes_v2.xsd"/>
+	<xs:import namespace="urn:cec.eu.int:taxud:directtax:v4" schemaLocation="directtax_v4.xsd"/>
+	<xs:import namespace="urn:cec.eu.int:taxud:directtax:eusd:v4" schemaLocation="stfmodifiedtypes_v4.xsd"/>
+	
+	<xs:element name="DAC1_Statistics">
+		<xs:annotation>
+			<xs:documentation>This is the root element of the statistics on Status messages.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" type="cms:Header">
+					<xs:annotation>
+						<xs:documentation>This element represents the header of the message, containing its general information.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:sequence>
+					<xs:element name="records" type="Records_Type" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>This element represents the statistics related to the Status messages. It is equivalent to the Microsoft Excel file defined in the AEOI DAC1 FS for the Status message statistics.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:sequence>
+			<xs:attribute name="version" type="xs:decimal" use="required">
+				<xs:annotation>
+					<xs:documentation>Identification of the XSD version being used.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!-- MsgApplicationIdSTS_Type -->
+	<xs:simpleType name="MsgApplicationIdSTS_Type">
+		<xs:annotation>
+			<xs:documentation>This element describes the category of income and capital. It can be IE, DF, IP, PEN, LIP or ROY.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="AEOI-IE">
+				<xs:annotation>
+					<xs:documentation>Income from employment (IE)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="AEOI-DF">
+				<xs:annotation>
+					<xs:documentation>Director's Fees (DF)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="AEOI-IP">
+				<xs:annotation>
+					<xs:documentation>Ownership of and income from Immovable Property (IP)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="AEOI-PEN">
+				<xs:annotation>
+					<xs:documentation>Pensions (PEN)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="AEOI-LIP">
+				<xs:annotation>
+					<xs:documentation>Life Insurance Products (LIP)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="AEOI-ROY">
+				<xs:annotation>
+					<xs:documentation>Royalties (ROY)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<!-- MsgTypeIndicSTS_Type -->
+	<xs:simpleType name="MsgTypeIndicSTS_Type">
+		<xs:annotation>
+			<xs:documentation>This field will always be set to "4" as it is always Status messages.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="4">
+				<xs:annotation>
+					<xs:documentation>Status Messages</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="Records_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics related to the Status Message.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:sequence>
+				<xs:element name="STS-110" type="STS-110_Type" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The STS-110 query result set presents the Status Messages, their status (acceptance or rejection) and the number of associated validation error(s), if any.
+This query provides quantitative information about the Status MSGs.
+This query allows assessing the validity and quality of the information sent by the MSs for each category of income and capital.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="STS-120" type="STS-120_Type" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The STS-120 query result set presents the number of validation errors corresponding to each error code within the Status MSGs of the various categories of income and capital, MS, status…
+This query provides quantitative information about the validation errors within the Status MSGs.
+This query allows assessing the validity and quality of the information sent by the MSs for each category of income and capital.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="STS-110_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics for STS-110 - Status Message Statistics.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MSG_ID" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element defines the identification number for the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_REF" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the reference of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_DATE" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the date of sending of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_ORIGINATING_COUNTRY" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the MS sending the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_DESTINATION_COUNTRY" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the MS receiving the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_TYPE_INDIC" type="MsgTypeIndicSTS_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes if the element is an Initial message or an XML correction. This field will always be set to "4" as it is always Status messages.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_CORRELATION_REF" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Reference of the previously sent message for which the Status message has been sent.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_APPLICATION_ID" type="MsgApplicationIdSTS_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the category of income and capital. This field can take one of the following values:
+•	AEOI-IE;
+•	AEOI-DF;
+•	AEOI-IP;
+•	AEOI-PEN;
+•	AEOI-LIP;
+•	AEOI-ROY.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_TAX_YEAR" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the tax year of the initial or correction message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="STATUS" type="cms:Status_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This data type refers to Status of the previously sent message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="VALIDATED_BY" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Validation module which has validated the previously sent message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ST_MSG_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Status messages for the previously sent message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ST_ERRORS_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of validation error(s), to the error code, detected in the previously sent message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="STS-120_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics for STS-120 - Status Message Error Statistics.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MSG_ID" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element defines the identification number for the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_REF" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the reference of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_DATE" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the date of sending of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_ORIGINATING_COUNTRY" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the MS sending the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_DESTINATION_COUNTRY" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the MS receiving the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_TYPE_INDIC" type="MsgTypeIndicSTS_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes if the element is an Initial message or an XML correction. This field will always be set to "4" as it is always Status messages.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_CORRELATION_REF" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Reference of the previously sent message for which the Status message has been sent.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_APPLICATION_ID" type="MsgApplicationIdSTS_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the category of income and capital. This field can take one of the following values:
+•	AEOI-IE;
+•	AEOI-DF;
+•	AEOI-IP;
+•	AEOI-PEN;
+•	AEOI-LIP;
+•	AEOI-ROY.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MSG_TAX_YEAR" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the tax year of the initial or correction message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="STATUS" type="cms:Status_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This data type refers to Status of the previously sent message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="VALIDATED_BY" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Validation module which has validated the previously sent message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ERROR_CODE" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Error code detected in the previously sent message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ST_ERRORS_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of validation error(s), to the error code, detected in the previously sent message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

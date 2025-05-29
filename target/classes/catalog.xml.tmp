@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+    <system systemId="http://www.w3.org/2001/xml.xsd" uri="xml.xsd"/>
+    <system systemId="DAC1_IES.xsd" uri="DAC1_IES.xsd"/>
+    <system systemId="DAC1_IPS.xsd" uri="DAC1_IPS.xsd"/>
+    <system systemId="commontypes_v2.xsd" uri="commontypes_v2.xsd"/>
+    <system systemId="commontypes_statistics.xsd" uri="commontypes_statistics.xsd"/>
+    <system systemId="stftypes-2.0.xsd" uri="stftypes-2.0.xsd"/>
+    <system systemId="stfmodifiedtypes_v4.xsd" uri="stfmodifiedtypes_v4.xsd"/>
+    <system systemId="specifictypes_v2.xsd" uri="specifictypes_v2.xsd"/>
+    <system systemId="sdtypes_v4.xsd" uri="sdtypes_v4.xsd"/>
+    <system systemId="sdbody_v4.xsd" uri="sdbody_v4.xsd"/>
+    <system systemId="oecdtypes_v2.xsd" uri="oecdtypes_v2.xsd"/>
+    <system systemId="isotypes_v2.xsd" uri="isotypes_v2.xsd"/>
+    <system systemId="directtax_v4.xsd" uri="directtax_v4.xsd"/>
+</catalog>

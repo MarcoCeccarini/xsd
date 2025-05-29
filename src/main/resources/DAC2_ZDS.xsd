@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:ec.europa.eu:taxud:directtax:aeoi:v1" xmlns:aeoi="urn:ec.europa.eu:taxud:directtax:aeoi:v1" xmlns:cm="urn:ec.europa.eu:taxud:directtax:aeoi:common:v2" xmlns:cms="urn:ec.europa.eu:taxud:directtax:aeoi:common_statistics:v2" xmlns:co="urn:oecd:ties:stf:v2" xmlns:dt="urn:cec.eu.int:taxud:directtax:v4" xmlns:stfm="urn:cec.eu.int:taxud:directtax:eusd:v4" targetNamespace="urn:ec.europa.eu:taxud:directtax:aeoi:v1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:import namespace="urn:ec.europa.eu:taxud:directtax:aeoi:common:v2" schemaLocation="commontypes_v2.xsd"/>
+	<xs:import namespace="urn:ec.europa.eu:taxud:directtax:aeoi:common_statistics:v2" schemaLocation="commontypes_statistics.xsd"/>
+	<xs:import namespace="urn:oecd:ties:stf:v2" schemaLocation="oecdtypes_v2.xsd"/>
+	<xs:import namespace="urn:cec.eu.int:taxud:directtax:v4" schemaLocation="directtax_v4.xsd"/>
+	<xs:import namespace="urn:cec.eu.int:taxud:directtax:eusd:v4" schemaLocation="stfmodifiedtypes_v4.xsd"/>
+	<xs:element name="DAC2_Statistics">
+		<xs:annotation>
+			<xs:documentation>This is the root element of the statistics on Zero Data messages.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" type="cms:Header">
+					<xs:annotation>
+						<xs:documentation>This element represents the header of the message, containing its general information.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:sequence>
+					<xs:element name="records" type="Records_Type" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>This element represents the statistics related to the Zero Data Messages. It is equivalent to the Microsoft Excel file defined in the AEOI DAC2 FS for Zero Data Messages statistics.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:sequence>
+			<xs:attribute name="version" type="xs:decimal" use="required">
+				<xs:annotation>
+					<xs:documentation>Identification of the XSD version being used.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="Records_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics related to the Zero Data Message.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ZDS-110" type="ZDS-110_Type" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+						<xs:documentation>The ZDS-110 query result set presents the number of Zero Data MSGs per category of income and capital, MS, tax year,…
+This query provides quantitative information about the Zero Data MSGs.</xs:documentation>
+					</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ZDS-110_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics for ZDS-110 - Zero Data Message Statistics.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MESSAGE_ID" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element defines the identification number for the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MESSAGE_REF" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the reference of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MESSAGE_DATE" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the date on which the message has been sent.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SS_CODE" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element identifies the country code of the message sender.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RR_CODE" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element identifies the country code of the message receiver.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MESSAGE_TYPE" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the type of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MESSAGE_TYPE_INDICATOR" type="cms:MessageTypeIndicator_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the nature of the data of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="REPORTING_PERIOD" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the last day of a reporting period.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ZDM_DETAIL" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the detail explaining the Zero Data message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ZDM_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Number of Zero Data MSGs.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>	
+</xs:schema>

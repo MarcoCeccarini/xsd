@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jaxb:bindings 
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    
+    
+    jaxb:version="2.0">
+    
+	 <!-- Binding for DAC1_IES.xsd -->
+    <jaxb:bindings schemaLocation="DAC1_IES.xsd" node="/xsd:schema">
+    
+    	 <!-- Define package name prefix for generated classes 
+        <jaxb:schemaBindings>
+            <jaxb:package name="eu.europa.ec.taxud.directtax.aeoi.v1"/>
+            <jaxb:nameXmlTransform>
+          		<jaxb:elementName prefix="it.finanze.entrate.statist"/>
+      		</jaxb:nameXmlTransform> 
+        </jaxb:schemaBindings> -->
+    
+    	<jaxb:bindings node="//xsd:element[@name='DAC1_Statistics']">
+            <jaxb:class name="DAC1StatisticsIES"/>
+        </jaxb:bindings>
+    
+    
+        <jaxb:bindings node="//xsd:complexType[@name='Records_Type']">
+            <jaxb:class name="RecordsTypeIES"/>
+        </jaxb:bindings>
+    </jaxb:bindings>
+    
+    
+     <!-- Binding for DAC1_IPS.xsd 
+    <jaxb:bindings schemaLocation="DAC1_IPS.xsd" node="/xsd:schema">
+        <jaxb:bindings node="//xsd:complexType[@name='Records_Type']">
+            <jaxb:class name="RecordsTypeIPS"/>
+        </jaxb:bindings>
+    </jaxb:bindings> -->
+    
+</jaxb:bindings>

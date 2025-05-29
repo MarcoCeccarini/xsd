@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:dt="urn:cec.eu.int:taxud:directtax:v4" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:sd="urn:cec.eu.int:taxud:directtax:eusd:v4" xmlns:stf="urn:oecd:ties:stf:v2" targetNamespace="urn:cec.eu.int:taxud:directtax:v4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="4.00">
+	<xsd:annotation>
+		<xsd:documentation xml:lang="en">
+		=== HISTORY===
+		- Version 1.0: first issue of the schema as part of the Technical Specifications.
+		- Version 2.0: second issue, after MS review of the Technical Specifications
+		- Version 2.1: third issue, after further review by MS
+				- Remove CountryCode_Type
+				- Remove 0 from MessageTypeIndic_Type
+				- Do not require hyphen in UID_Type
+		- Version 3.0: Create MsgId_Type and use it for the MessageId and CorrelIationId elements of the Header
+		- Version 3.01: Change definition of the UID type to extend to Latin 1 characters
+			          Change definition of the "MsgId_Type" - character range is a-zA-Z, not a-zA-z 
+		- Version 3.02: Change definition of the UID type and MsgId_type to allow CW (Curacao), SX (Sint Maarten) and BQ (Bonaire, Sint Eustasius and Saba)
+		- Version 3.03: Change definition of the UID type and MsgId_type to allow EL (Greece), IC (Canary Islands), XI (CEUTA) and XJ (MELILLA)
+		- Version 3.04: Change definition of the UID type and MsgId_type to allow HR (Croatia)
+		- Version 3.05: Change definition of the UID type and MsgId_type to allow CW (Curacao) - missing from version 3.02.
+		- Version 3.06: Added GI and BL in UID_Type and MsgId_Type (required for the DAC1 territorial features).
+		- Version 4.00: Alignment of versions in the scope of RfA 09-592.
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:import namespace="urn:oecd:ties:stf:v2" schemaLocation="stftypes-2.0.xsd"/>
+	<xsd:import namespace="urn:cec.eu.int:taxud:directtax:eusd:v4" schemaLocation="sdbody_v4.xsd"/>
+	<xsd:include schemaLocation="isotypes_v2.xsd"/>
+	<xsd:simpleType name="CountryCodeList_Type">
+		<xsd:list itemType="dt:CountryCode_Type"/>
+	</xsd:simpleType>
+	<xsd:simpleType name="MessageTypeIndic_Type">
+		<xsd:restriction base="xsd:byte">
+			<xsd:enumeration value="1"/>
+			<xsd:enumeration value="2"/>
+			<xsd:enumeration value="3"/>
+			<xsd:enumeration value="4"/>
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="UID_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="70"/>
+			<xsd:pattern value="(AT|BE|BG|CY|CZ|DE|DK|EE|EL|GR|ES|FI|FR|GB|HR|HU|IE|IT|LT|LU|LV|MT|NL|PL|PT|RO|SE|SI|SK)(\p{IsBasicLatin}|\p{IsLatin-1Supplement})*"/>
+			<xsd:pattern value="(AD|AN|AI|AW|BL|CH|GI|GG|IC|IM|JE|KY|LI|MC|MS|SM|TC|VG|CQ|SX|BQ|XI|XJ|CW)(\p{IsBasicLatin}|\p{IsLatin-1Supplement})*"/>
+			<!--The Member States-->
+			<!--Third countries and dependent/associated territories-->
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:simpleType name="MsgId_Type">
+		<xsd:restriction base="xsd:string">
+			<xsd:maxLength value="64"/>
+			<xsd:pattern value="(AT|BE|BG|CY|CZ|DE|DK|EE|EL|GR|ES|FI|FR|GB|HR|HU|IE|IT|LT|LU|LV|MT|NL|PL|PT|RO|SE|SI|SK)[a-zA-Z0-9:\-\._]*"/>
+			<xsd:pattern value="(AD|AN|AI|AW|BL|CH|GI|GG|IC|IM|JE|KY|LI|MC|MS|SM|TC|VG|CQ|SX|BQ|XI|XJ|CW)[a-zA-Z0-9:\-\._]*"/>
+			<!--The Member States-->
+			<!--Third countries and dependent/associated territories-->
+		</xsd:restriction>
+	</xsd:simpleType>
+	<xsd:complexType name="Body_Type" abstract="true">
+		<xsd:sequence>
+			<xsd:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:attribute name="applicationId" use="required"/>
+	</xsd:complexType>
+	<xsd:element name="DirectTaxMessage">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="Header" type="dt:Header_Type"/>
+				<xsd:element name="Body" type="dt:Body_Type"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:complexType name="Header_Type">
+		<xsd:sequence>
+			<xsd:element name="OriginatingCountry" type="dt:CountryCode_Type"/>
+			<xsd:element name="DestinationCountries" type="dt:CountryCodeList_Type"/>
+			<xsd:element name="MessageId" type="dt:MsgId_Type"/>
+			<xsd:element name="CorrelationId" type="dt:MsgId_Type" minOccurs="0"/>
+			<xsd:element name="Timestamp" type="xsd:dateTime"/>
+			<xsd:element name="MessageTypeIndic" type="dt:MessageTypeIndic_Type"/>
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:stf="urn:oecd:ties:stf:v2" xmlns:dt="urn:cec.eu.int:taxud:directtax:v4" xmlns="urn:ec.europa.eu:taxud:directtax:aeoi:common:v2" targetNamespace="urn:ec.europa.eu:taxud:directtax:aeoi:common:v2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.00">
+	<!--HISTORY	
+		22/04/2013 - Added Periodicity_Type
+		25/01/2013 - Initial version		
+		23/06/2020 - Alignment of versions in the scope of RfA 09-592.
+	-->
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace"/>
+	<xs:import namespace="urn:oecd:ties:stf:v2" schemaLocation="stftypes-2.0.xsd"/>
+	<xs:import namespace="urn:cec.eu.int:taxud:directtax:v4" schemaLocation="directtax_v4.xsd"/>
+	<xs:include schemaLocation="isotypes_v2.xsd"/>
+	<!--
+		Common Complex Data Types (and documentation for Common Simple Date Types)
+	-->
+	<xs:simpleType name="AmountValue_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">GEN-DT-AMOUNT: A decimal amount, restricted to two decimal places.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:decimal">
+			<xs:fractionDigits value="2"/>
+		</xs:restriction>
+		<!-- Copied from M1SS -->
+	</xs:simpleType>
+	<!-- GEN-DT-BOOLEAN: xs:boolean -->
+	<!-- GEN-DT-COUNTRY: CountryCode_Type -->
+	<!-- GEN-DT-CURRENCY: currCode_Type -->
+	<xs:simpleType name="DateYearMonthDay_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">GEN-DT-DATE.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:date">
+			<xs:pattern value="\d{4}-\d{2}-\d{2}"/>
+			<!-- Restricted to positive years, no timezone -->
+		</xs:restriction>
+		<!-- Based on VAT Refund / M1SS RestrictedDate_Type -->
+	</xs:simpleType>
+	<!-- GEN-DT-FREETEXT: xs:string or... -->
+	<xs:complexType name="I18nString_Type">
+		<xs:annotation>
+			<xs:documentation>Internationalised string</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="lang" type="xs:language" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+		<!-- Copied from M1SS -->
+	</xs:complexType>
+	<xs:simpleType name="LimitedInteger_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">GEN-DT-LIMITEDINT</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:nonNegativeInteger">
+			<xs:minExclusive value="0"/>
+			<xs:maxInclusive value="999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Percentage_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">GEN-DT-PERCENTAGE</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:decimal">
+			<xs:fractionDigits value="2"/>
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="100"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- GEN-DT-TOKEN: xs:token -->
+	<!-- GEN-DT-TRILEAN -->
+	<!-- GEN-DT-WHOLE-NUMBER: xs:integer -->
+	<xs:simpleType name="DateYear_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">GEN-DT-YEAR</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:gYear">
+			<xs:pattern value="\d{4}"/>
+			<!-- Restricted to positive years -->
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="DateYearMonth_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">GEN-DT-YEARMONTH</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:gYearMonth">
+			<xs:pattern value="\d{4}-\d{2}"/>
+			<!-- Restricted to positive years -->
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- Commonly used alternative of the three date types. Not part of the FS -->
+	<xs:complexType name="AdjustablePrecisionDate_Type">
+		<xs:choice>
+			<xs:element name="DateYMD" type="DateYearMonthDay_Type"/>
+			<xs:element name="DateYM" type="DateYearMonth_Type"/>
+			<xs:element name="DateY" type="DateYear_Type"/>
+		</xs:choice>
+	</xs:complexType>
+	<!--
+		Common Data Elements
+	-->
+	<xs:simpleType name="AddressType_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The Address Type refers to the usage it is made of an Address.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="residentialOrBusiness"/>
+			<xs:enumeration value="residential"/>
+			<xs:enumeration value="business"/>
+			<xs:enumeration value="registeredOffice"/>
+			<xs:enumeration value="unspecified"/>
+		</xs:restriction>
+		<!-- Derived from STF legalAddressType_Type -->
+	</xs:simpleType>
+	<xs:simpleType name="AmountType_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The Amount Type refers to the nature of an amount of money.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="TotalGross"/>
+			<xs:enumeration value="DeductionsExempted"/>
+			<xs:enumeration value="Taxable"/>
+			<xs:enumeration value="Tax"/>
+			<xs:enumeration value="NetTaxed"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Capacity_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The Capacity is referring to the Acting Capacity of a Person (either NP or NNP). It mentions whether the person does business or private or both or this is unknown.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Private"/>
+			<xs:enumeration value="Business"/>
+			<xs:enumeration value="PrivateAndBusiness"/>
+			<xs:enumeration value="Unknown"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ContributionTaxTreatment_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This data type refers to the tax treatment to apply on contributions.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="NoRelief"/>
+			<xs:enumeration value="ReliefDeductible"/>
+			<xs:enumeration value="ReliefDeducted"/>
+			<xs:enumeration value="Mixed"/>
+			<xs:enumeration value="NotApplicable"/>
+			<xs:enumeration value="Unknown"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- Note: Gender_Type imported from STF -->
+	<xs:simpleType name="IDType_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This data type describes the type of Person identifier (ID).</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="TIN"/>
+			<xs:enumeration value="SocialSecurityNumber"/>
+			<xs:enumeration value="VATNumber"/>
+			<xs:enumeration value="Other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="NameType_Type">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="indiv"/>
+			<xs:enumeration value="alias"/>
+			<xs:enumeration value="nick"/>
+			<xs:enumeration value="aka"/>
+			<xs:enumeration value="dba"/>
+			<xs:enumeration value="legal"/>
+			<xs:enumeration value="atbirth"/>
+			<xs:enumeration value="pka"/>
+			<xs:enumeration value="other"/>
+		</xs:restriction>
+		<!-- Derived from STF -->
+	</xs:simpleType>
+	<xs:simpleType name="NNPPersonType_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This data type describes the type of an NNP.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="SoleProprietorship"/>
+			<xs:enumeration value="Corporation"/>
+			<xs:enumeration value="Government"/>
+			<xs:enumeration value="InternationalOrganisation"/>
+			<xs:enumeration value="PensionFund"/>
+			<xs:enumeration value="Charity"/>
+			<xs:enumeration value="CollectiveInvestmentVehicle"/>
+			<xs:enumeration value="Partnership"/>
+			<xs:enumeration value="Trust"/>
+			<xs:enumeration value="Estate"/>
+			<xs:enumeration value="Other"/>
+			<xs:enumeration value="Unknown"/>
+		</xs:restriction>
+		<!-- Derived from OECD oecdLegalType_Type. -->
+	</xs:simpleType>
+	<xs:simpleType name="PayerType_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This data type describes the type of Payer.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="StatePoliticalSubdivisionLocalAuthority"/>
+			<xs:enumeration value="Private"/>
+			<xs:enumeration value="Mixed"/>
+			<xs:enumeration value="Unknown"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="PermanentEstablishment_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This data type describes whether an NNP is a Permanent Establishment in the SS or not or it is unknown. Permanent Establishment must be understood according to the definition given by the OECD Model Tax Convention on Income and Capital Art. 5 on Permanent Establishment.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Yes"/>
+			<xs:enumeration value="No"/>
+			<xs:enumeration value="Unknown"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="Periodicity_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">The periodicity is associated with an Event and describes how many times this Event happened.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="N"/>
+			<xs:enumeration value="Unknown"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ReportingType_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This data type describes whether the income related to the relationship between a Payer and a Recipient is linked to a payment, an entitlement, and arrears or has another origin. This information allows the SS to state whether the IE is included in the tax year on the basis of the payment or on the basis of the entitlement as MSs may have varying practices in this respect; if need be, it would also allow  to refer to payment in arrears or to other payments.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Payment"/>
+			<xs:enumeration value="Entitlement"/>
+			<xs:enumeration value="Arrears"/>
+			<xs:enumeration value="Other"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="ShareType_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This data type describes the share of a Person.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="SoleParty"/>
+			<xs:enumeration value="MultipleParties"/>
+			<xs:enumeration value="Unknown"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="TaxableBasisType_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This data type indicates whether the amount to be taxed is based on an actual value, a contractual value or a notional value.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="Actual"/>
+			<xs:enumeration value="Contractual"/>
+			<xs:enumeration value="Notional"/>
+			<xs:enumeration value="Unknown"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<!--
+		Common Data Elements
+	-->
+	<xs:complexType name="AEOIBodyWithTaxYear_Type" abstract="true">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Abstract subtype of the standard body type to add a tax year</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="dt:Body_Type">
+				<xs:attribute name="taxYear" type="DateYearMonthDay_Type" use="required"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<!--
+	Person (and related)
+	-->
+	<xs:complexType name="PersonId_Type">
+		<xs:sequence>
+			<xs:element name="Ref" type="xs:token"/>
+			<xs:element name="Country" type="CountryCode_Type" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="idType" type="IDType_Type" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="PersonIdOpt_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Alternative for PersonId_Type where all mandatory fields are optional. Used for Representatives, Counterparts and Administrators.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Ref" type="xs:token" minOccurs="0"/>
+			<xs:element name="Country" type="CountryCode_Type" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="idType" type="IDType_Type" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="NaturalPerson_Type">
+		<xs:sequence>
+			<xs:choice>
+				<xs:annotation>
+					<xs:documentation>mustBeAtLeast(ID, BIRTH)</xs:documentation>
+				</xs:annotation>
+				<xs:element name="Birth" type="Birth_Type"/>
+				<xs:sequence>
+					<xs:element name="ID" type="PersonId_Type" maxOccurs="unbounded"/>
+					<xs:element name="Birth" type="Birth_Type" minOccurs="0"/>
+				</xs:sequence>
+			</xs:choice>
+			<xs:element name="Address" type="Address_Type" maxOccurs="unbounded"/>
+			<xs:element name="Name" type="Name_Type" maxOccurs="unbounded"/>
+			<xs:element name="ActingCapacity" type="Capacity_Type"/>
+			<xs:element name="Gender" type="stf:Gender_Type" minOccurs="0"/>
+			<xs:element name="ResidenceCountryCode" type="CountryCode_Type"/>
+			<xs:element name="NationalityCountryCode" type="CountryCode_Type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="OtherPartyInfo" type="I18nString_Type" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<!-- Similar to IndivPersData_Type from STF but keeps everything on one level (and extended) -->
+	</xs:complexType>
+	<xs:complexType name="NaturalPersonOpt_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Alternative for NaturalPerson_Type where all mandatory fields are optional. Used for Representatives, Counterparts and Administrators.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ID" type="PersonIdOpt_Type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Birth" type="BirthOpt_Type" minOccurs="0"/>
+			<xs:element name="Address" type="AddressOpt_Type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Name" type="NameOpt_Type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ActingCapacity" type="Capacity_Type" minOccurs="0"/>
+			<xs:element name="Gender" type="stf:Gender_Type" minOccurs="0"/>
+			<xs:element name="ResidenceCountryCode" type="CountryCode_Type" minOccurs="0"/>
+			<xs:element name="NationalityCountryCode" type="CountryCode_Type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="OtherPartyInfo" type="I18nString_Type" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Birth_Type">
+		<xs:sequence>
+			<xs:element name="BirthDate" type="AdjustablePrecisionDate_Type"/>
+			<xs:element name="BirthCity" type="xs:string" minOccurs="0"/>
+			<xs:element name="BirthCountrySubentity" type="xs:string" minOccurs="0"/>
+			<xs:element name="BirthCountryCode" type="CountryCode_Type" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BirthOpt_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Alternative for Birth_Type where all mandatory fields are optional. Used for Representatives, Counterparts and Administrators.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="BirthDate" type="AdjustablePrecisionDate_Type" minOccurs="0"/>
+			<xs:element name="BirthCity" type="xs:string" minOccurs="0"/>
+			<xs:element name="BirthCountrySubentity" type="xs:string" minOccurs="0"/>
+			<xs:element name="BirthCountryCode" type="CountryCode_Type" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Name_Type">
+		<xs:choice>
+			<xs:element name="NameFree" type="xs:string"/>
+			<xs:sequence>
+				<xs:element name="NameStruct" type="NameStruct_Type"/>
+				<xs:element name="NameFree" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:choice>
+		<xs:attribute name="nameType" type="NameType_Type" use="optional"/>
+		<!-- Copied from FISC153 / VAT Refund / M1SS. -->
+	</xs:complexType>
+	<xs:complexType name="NameOpt_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Alternative for Name_Type where all mandatory fields are optional. Used for Representatives, Counterparts and Administrators.</xs:documentation>
+		</xs:annotation>
+		<xs:choice>
+			<xs:element name="NameFree" type="xs:string"/>
+			<xs:sequence>
+				<xs:element name="NameStruct" type="NameStructOpt_Type"/>
+				<xs:element name="NameFree" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:choice>
+		<xs:attribute name="nameType" type="NameType_Type" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="NameStruct_Type">
+		<xs:sequence>
+			<xs:element name="PrecedingTitle" type="xs:string" minOccurs="0"/>
+			<xs:element name="Title" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Firstname" type="xs:string"/>
+			<xs:element name="MiddleName" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="NamePrefix" type="xs:string" minOccurs="0"/>
+			<xs:element name="LastName" type="xs:string"/>
+			<xs:element name="GenerationIdentifier" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Suffix" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="GeneralSuffix" type="xs:string" minOccurs="0"/>
+			<xs:element name="OtherNameId" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<!-- Derived from M1SS, but without MaidenName and with OtherNameId -->
+	</xs:complexType>
+	<xs:complexType name="NameStructOpt_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Alternative for NameStruct_Type where all mandatory fields are optional. Used for Representatives, Counterparts and Administrators.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PrecedingTitle" type="xs:string" minOccurs="0"/>
+			<xs:element name="Title" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Firstname" type="xs:string" minOccurs="0"/>
+			<xs:element name="MiddleName" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="NamePrefix" type="xs:string" minOccurs="0"/>
+			<xs:element name="LastName" type="xs:string" minOccurs="0"/>
+			<xs:element name="GenerationIdentifier" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Suffix" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="GeneralSuffix" type="xs:string" minOccurs="0"/>
+			<xs:element name="OtherNameId" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="NonNaturalPerson_Type">
+		<xs:sequence>
+			<xs:element name="ID" type="PersonId_Type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Address" type="Address_Type" maxOccurs="unbounded"/>
+			<xs:element name="PersonName" type="NonNaturalPersonName_Type" maxOccurs="unbounded"/>
+			<xs:element name="Commencement" type="Commencement_Type" minOccurs="0"/>
+			<xs:element name="Form" type="xs:token" minOccurs="0"/>
+			<xs:element name="ResidenceCountryCode" type="CountryCode_Type"/>
+			<xs:element name="PermanentEstablishment" type="PermanentEstablishment_Type"/>
+			<xs:element name="OtherPartyInfo" type="I18nString_Type" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="type" type="NNPPersonType_Type" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="NonNaturalPersonOpt_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Alternative for NonNaturalPerson_Type where all mandatory fields are optional. Used for Representatives, Counterparts and Administrators.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ID" type="PersonIdOpt_Type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Address" type="AddressOpt_Type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PersonName" type="NonNaturalPersonNameOpt_Type" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Commencement" type="Commencement_Type" minOccurs="0"/>
+			<xs:element name="Form" type="xs:token" minOccurs="0"/>
+			<xs:element name="ResidenceCountryCode" type="CountryCode_Type" minOccurs="0"/>
+			<xs:element name="PermanentEstablishment" type="PermanentEstablishment_Type" minOccurs="0"/>
+			<xs:element name="OtherPartyInfo" type="I18nString_Type" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+		<xs:attribute name="type" type="NNPPersonType_Type"/>
+	</xs:complexType>
+	<xs:complexType name="NonNaturalPersonName_Type">
+		<xs:sequence>
+			<xs:element name="Name" type="xs:string"/>
+		</xs:sequence>
+		<xs:attribute name="nameType" type="NameType_Type" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="NonNaturalPersonNameOpt_Type">
+		<xs:sequence>
+			<xs:element name="Name" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="nameType" type="NameType_Type" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="Commencement_Type">
+		<xs:sequence>
+			<xs:element name="CommencementDate" type="AdjustablePrecisionDate_Type" minOccurs="0"/>
+			<xs:element name="CommencementCity" type="xs:string" minOccurs="0"/>
+			<xs:element name="CommencementCountrySubentity" type="xs:string" minOccurs="0"/>
+			<xs:element name="CommencementCountryCode" type="CountryCode_Type" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--
+	Financial Info (and related)
+	-->
+	<xs:complexType name="FinancialInfo_Type">
+		<xs:sequence>
+			<xs:element name="Amount" type="MoneyAmount_Type"/>
+			<xs:element name="Payments" minOccurs="0">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Payment" type="Payment_Type" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Payment_Type">
+		<xs:sequence>
+			<xs:element name="Amount" type="MoneyAmount_Type"/>
+			<!-- The following construct ensures that 1, or the other, or both (exactly once) will be specified -->
+			<xs:choice>
+				<xs:element name="PaymentDate" type="AdjustablePrecisionDate_Type"/>
+				<xs:sequence>
+					<xs:element name="AccountInformation" type="AccountInformation_Type"/>
+					<xs:element name="PaymentDate" type="AdjustablePrecisionDate_Type" minOccurs="0"/>
+				</xs:sequence>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AccountInformation_Type">
+		<xs:sequence>
+			<xs:element name="BAN" type="BankAccountNumber_Type" minOccurs="0"/>
+			<xs:element name="OtherAccountInformation" type="xs:token" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="SIN" type="SecuritiesIdentificationNumber_Type" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="BankAccountNumber_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">A Bank Account Number</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="BIC" type="BIC_Type" minOccurs="0"/>
+			<xs:element name="IBAN" type="stf:IBAN_Type" minOccurs="0"/>
+			<xs:element name="OBAN" type="xs:token" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="BIC_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Bank Identifer Code.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3}){0,1}"/>
+		</xs:restriction>
+		<!-- Copied from M1SS -->
+	</xs:simpleType>
+	<xs:complexType name="SecuritiesIdentificationNumber_Type">
+		<xs:choice>
+			<xs:element name="ISIN" type="stf:ISIN_Type"/>
+			<xs:element name="OSIN" type="xs:token"/>
+		</xs:choice>
+	</xs:complexType>
+	<!--
+	Amount
+	-->
+	<xs:complexType name="MoneyAmount_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">An amount: a value with a currency attribute.</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="AmountValue_Type">
+				<xs:attribute name="currency" type="currCode_Type" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+		<!-- Copied from VAT Refund -->
+	</xs:complexType>
+	<!--
+	Address
+	-->
+	<xs:complexType name="Address_Type">
+		<xs:sequence>
+			<xs:element name="CountryCode" type="CountryCode_Type"/>
+			<xs:choice>
+				<xs:element name="AddressFree" type="xs:string"/>
+				<xs:sequence>
+					<xs:element name="AddressStruct" type="AddressStruct_Type"/>
+					<xs:element name="AddressFree" type="xs:string" minOccurs="0"/>
+				</xs:sequence>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="addressType" type="AddressType_Type" use="required"/>
+		<!-- Taken from FISC153, but with a mandatory attribute -->
+	</xs:complexType>
+	<xs:complexType name="AddressOpt_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Alternative for Address_Type where all mandatory fields are optional. Used for Representatives, Counterparts and Administrators.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CountryCode" type="CountryCode_Type" minOccurs="0"/>
+			<xs:choice>
+				<xs:element name="AddressFree" type="xs:string"/>
+				<xs:sequence>
+					<xs:element name="AddressStruct" type="AddressStructOpt_Type"/>
+					<xs:element name="AddressFree" type="xs:string" minOccurs="0"/>
+				</xs:sequence>
+			</xs:choice>
+		</xs:sequence>
+		<xs:attribute name="addressType" type="AddressType_Type"/>
+	</xs:complexType>
+	<xs:complexType name="AddressStruct_Type">
+		<xs:sequence>
+			<xs:element name="Street" type="xs:string" minOccurs="0"/>
+			<xs:element name="BuildingIdentifier" type="xs:string" minOccurs="0"/>
+			<xs:element name="SuiteIdentifier" type="xs:string" minOccurs="0"/>
+			<xs:element name="FloorIdentifier" type="xs:string" minOccurs="0"/>
+			<xs:element name="DistrictName" type="xs:string" minOccurs="0"/>
+			<xs:element name="POB" type="xs:string" minOccurs="0"/>
+			<xs:element name="PostCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="City" type="xs:string"/>
+			<xs:element name="CountrySubentity" type="xs:string" minOccurs="0"/>
+			<xs:element name="OtherLocalId" type="xs:string" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<!-- Similar to FISC153, but with any amount of OtherLocalId -->
+	</xs:complexType>
+	<xs:complexType name="AddressStructOpt_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">Alternative for AddressStruct_Type where all mandatory fields are optional. Used for Representatives, Counterparts and Administrators.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Street" type="xs:string" minOccurs="0"/>
+			<xs:element name="BuildingIdentifier" type="xs:string" minOccurs="0"/>
+			<xs:element name="SuiteIdentifier" type="xs:string" minOccurs="0"/>
+			<xs:element name="FloorIdentifier" type="xs:string" minOccurs="0"/>
+			<xs:element name="DistrictName" type="xs:string" minOccurs="0"/>
+			<xs:element name="POB" type="xs:string" minOccurs="0"/>
+			<xs:element name="PostCode" type="xs:string" minOccurs="0"/>
+			<xs:element name="City" type="xs:string" minOccurs="0"/>
+			<xs:element name="CountrySubentity" type="xs:string" minOccurs="0"/>
+			<xs:element name="OtherLocalId" type="xs:string" minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="Existence_Type">
+		<xs:annotation>
+			<xs:documentation xml:lang="en">This data type refers to the existence of an instance of the corresponding class, even if this class cannot be characterized by financial information.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:boolean">
+			<xs:pattern value="true|1"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jaxb:bindings 
+    xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    
+    
+    jaxb:version="2.0">
+    
+	 <!-- Binding for DAC1_IES.xsd -->
+    <jaxb:bindings schemaLocation="DAC2_STS.xsd" node="/xsd:schema">
+    
+    	<jaxb:bindings node="//xsd:element[@name='DAC2_Statistics']">
+            <jaxb:class name="DAC2StatisticsSTS"/>
+        </jaxb:bindings>
+    
+    
+        <jaxb:bindings node="//xsd:complexType[@name='Records_Type']">
+            <jaxb:class name="RecordsTypeDAC2STS"/>
+        </jaxb:bindings>
+        
+        <jaxb:bindings node="//xsd:complexType[@name='STS-110_Type']">
+            <jaxb:class name="STS110TypeDAC2STS"/>
+        </jaxb:bindings>
+    </jaxb:bindings>
+    
+</jaxb:bindings>

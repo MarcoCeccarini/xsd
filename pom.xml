@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>guru.springframework</groupId>
+	<artifactId>jaxb-xsd-example</artifactId>
+	<version>1.0-SNAPSHOT</version>
+
+	<dependencies>
+		<!--jaxb support -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.2.12</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>2.2.11</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-core</artifactId>
+			<version>2.2.11</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jvnet.jaxb2_commons</groupId>
+			<artifactId>jaxb2-basics</artifactId>
+			<version>0.11.1</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<version>0.12.3</version>
+				<executions>
+					<execution>
+						<id>ies</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<forceRegenerate>false</forceRegenerate>
+							<schemaIncludes>
+								<include>DAC1_IES.xsd</include>
+							</schemaIncludes>
+<!--   							<generatePackage>it.finanze.entrate.statist</generatePackage> -->
+<!-- attention first pakage left bank as a prototipe -->
+ 							<generateDirectory>${project.basedir}/src/main/java</generateDirectory>
+							<bindingDirectory>${project.basedir}/src/main/resources</bindingDirectory>
+							<bindingIncludes>
+								<include>**/*.ies.xjb</include>
+							</bindingIncludes>
+							<!-- <catalog>${project.basedir}/src/main/resources/catalog.xml</catalog> -->
+							<extension>true</extension>
+							<strict>false</strict>
+						</configuration>
+					</execution>
+					<execution>
+						<id>ips</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<forceRegenerate>false</forceRegenerate>
+							<schemaIncludes>
+								<include>DAC1_IPS.xsd</include>
+							</schemaIncludes>
+							<generateDirectory>${project.basedir}/src/main/java/ips</generateDirectory>
+							<bindingDirectory>${project.basedir}/src/main/resources</bindingDirectory>
+							<bindingIncludes>
+								<include>**/*.ips.xjb</include>
+							</bindingIncludes>
+							<!-- <catalog>${project.basedir}/src/main/resources/catalog.xml</catalog> -->
+							<extension>true</extension>
+							<strict>false</strict>
+						</configuration>
+					</execution>
+					<execution>
+						<id>lips</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<forceRegenerate>false</forceRegenerate>
+							<schemaIncludes>
+								<include>DAC1_LIPS.xsd</include>
+							</schemaIncludes>
+							<generateDirectory>${project.basedir}/src/main/java/lips</generateDirectory>
+							<bindingDirectory>${project.basedir}/src/main/resources</bindingDirectory>
+							<bindingIncludes>
+								<include>**/*.lips.xjb</include>
+							</bindingIncludes>
+							<extension>true</extension>
+							<strict>false</strict>
+						</configuration>
+					</execution>				
+					<execution>
+						<id>pens</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<forceRegenerate>false</forceRegenerate>
+							<schemaIncludes>
+								<include>DAC1_PENS.xsd</include>
+							</schemaIncludes>
+							<generateDirectory>${project.basedir}/src/main/java/pens</generateDirectory>
+							<bindingDirectory>${project.basedir}/src/main/resources</bindingDirectory>
+							<bindingIncludes>
+								<include>**/*.pens.xjb</include>
+							</bindingIncludes>
+							<extension>true</extension>
+							<strict>false</strict>
+						</configuration>
+					</execution>	
+					<execution>
+						<id>sts</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<forceRegenerate>false</forceRegenerate>
+							<schemaIncludes>
+								<include>DAC1_STS.xsd</include>
+							</schemaIncludes>
+							<generateDirectory>${project.basedir}/src/main/java/sts</generateDirectory>
+							<bindingDirectory>${project.basedir}/src/main/resources</bindingDirectory>
+							<bindingIncludes>
+								<include>**/*.sts.xjb</include>
+							</bindingIncludes>
+							<extension>true</extension>
+							<strict>false</strict>
+						</configuration>
+					</execution>
+					<execution>
+						<id>zds</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<forceRegenerate>false</forceRegenerate>
+							<schemaIncludes>
+								<include>DAC1_ZDS.xsd</include>
+							</schemaIncludes>
+							<generateDirectory>${project.basedir}/src/main/java/zds</generateDirectory>
+							<bindingDirectory>${project.basedir}/src/main/resources</bindingDirectory>
+							<bindingIncludes>
+								<include>**/*.zds.xjb</include>
+							</bindingIncludes>
+							<extension>true</extension>
+							<strict>false</strict>
+						</configuration>
+					</execution>
+					<execution>
+						<id>d2fa</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<forceRegenerate>false</forceRegenerate>
+							<schemaIncludes>
+								<include>DAC2_FA.xsd</include>
+							</schemaIncludes>
+							<generateDirectory>${project.basedir}/src/main/java/d2fa</generateDirectory>
+							<bindingDirectory>${project.basedir}/src/main/resources</bindingDirectory>
+							<bindingIncludes>
+								<include>**/*.d2fa.xjb</include>
+							</bindingIncludes>
+							<extension>true</extension>
+							<strict>false</strict>
+						</configuration>
+					</execution>
+					<execution>
+						<id>d2sts</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<forceRegenerate>false</forceRegenerate>
+							<schemaIncludes>
+								<include>DAC2_STS.xsd</include>
+							</schemaIncludes>
+							<generateDirectory>${project.basedir}/src/main/java/d2sts</generateDirectory>
+							<bindingDirectory>${project.basedir}/src/main/resources</bindingDirectory>
+							<bindingIncludes>
+								<include>**/*.d2sts.xjb</include>
+							</bindingIncludes>
+							<extension>true</extension>
+							<strict>false</strict>
+						</configuration>
+					</execution>
+					<execution>
+						<id>d2zds</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<forceRegenerate>false</forceRegenerate>
+							<schemaIncludes>
+								<include>DAC2_ZDS.xsd</include>
+							</schemaIncludes>
+							<generateDirectory>${project.basedir}/src/main/java/d2zds</generateDirectory>
+							<bindingDirectory>${project.basedir}/src/main/resources</bindingDirectory>
+							<bindingIncludes>
+								<include>**/*.d2zds.xjb</include>
+							</bindingIncludes>
+							<extension>true</extension>
+							<strict>false</strict>
+						</configuration>
+					</execution>
+					<!-- execution> <id>ips</id> <goals><goal>generate</goal></goals> <configuration> 
+						<schemaIncludes><include>DAC1_IPS.xsd</include></schemaIncludes> <generateDirectory>${project.build.directory}/generated-sources/ips</generateDirectory> 
+						</configuration> </execution -->
+					<!-- <execution> -->
+					<!-- <id>all</id> -->
+					<!-- <goals> -->
+					<!-- <goal>generate</goal> -->
+					<!-- </goals> -->
+
+					<!-- <configuration> -->
+					<!-- <strict>false</strict> -->
+					<!-- <episode>true</episode> -->
+					<!-- <forceRegenerate>false</forceRegenerate> -->
+					<!-- <packageName>it.finanze.entrate.statist</packageName> -->
+					<!-- <generateDirectory>./src/main/java/all</generateDirectory> -->
+					<!-- <bindingDirectory>${project.basedir}/src/main/resources</bindingDirectory> -->
+					<!-- <bindingIncludes> -->
+					<!-- <include>**/*.xjb</include> -->
+					<!-- </bindingIncludes> -->
+					<!-- <catalog>${project.basedir}/src/main/resources/catalog.xml</catalog> -->
+					<!-- </configuration> -->
+					<!-- </execution> -->
+				</executions>
+
+			</plugin>
+		</plugins>
+	</build>
+</project>

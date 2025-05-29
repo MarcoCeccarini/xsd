@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:ec.europa.eu:taxud:directtax:aeoi:v1" xmlns:aeoi="urn:ec.europa.eu:taxud:directtax:aeoi:v1" xmlns:cm="urn:ec.europa.eu:taxud:directtax:aeoi:common:v2" xmlns:cms="urn:ec.europa.eu:taxud:directtax:aeoi:common_statistics:v2" xmlns:co="urn:oecd:ties:stf:v2" xmlns:dt="urn:cec.eu.int:taxud:directtax:v4" xmlns:stfm="urn:cec.eu.int:taxud:directtax:eusd:v4" targetNamespace="urn:ec.europa.eu:taxud:directtax:aeoi:v1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!--HISTORY	
+	09/08/2024 - DORMANT_ACCOUNT field is optional
+	15/12/2023 - Enforce mandatory fields: minOccurs=0 => minOccurs=1
+	22/05/2023 - DAC1-608: Align discrepancies in boolean definitions between DAC1, DAC2 and DAC1-DAC2-Stats 
+	26/04/2024 - DAC2-400: Update documentation of field "CODE" in STAT_DAC2-300 
+	-->
+	<xs:import namespace="urn:ec.europa.eu:taxud:directtax:aeoi:common:v2" schemaLocation="commontypes_v2.xsd"/>
+	<xs:import namespace="urn:ec.europa.eu:taxud:directtax:aeoi:common_statistics:v2" schemaLocation="commontypes_statistics.xsd"/>
+	<xs:import namespace="urn:oecd:ties:stf:v2" schemaLocation="oecdtypes_v2.xsd"/>
+	<xs:import namespace="urn:cec.eu.int:taxud:directtax:v4" schemaLocation="directtax_v4.xsd"/>
+	<xs:import namespace="urn:cec.eu.int:taxud:directtax:eusd:v4" schemaLocation="stfmodifiedtypes_v4.xsd"/>
+	<!--Account Number type-->
+	<xs:simpleType name="AccountNumberType_Type">
+		<xs:annotation>
+			<xs:documentation>This data type refers to the nature of the Account Number.
+</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="OECD601">
+				<xs:annotation>
+					<xs:documentation>IBAN International Bank Account Number (follows a known structure)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OECD602">
+				<xs:annotation>
+					<xs:documentation>OBAN Other Bank Account Number</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OECD603">
+				<xs:annotation>
+					<xs:documentation>ISIN International Securities Information Number (follows a known structure)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OECD604">
+				<xs:annotation>
+					<xs:documentation>OSIN Other Securities Information Number</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="OECD605">
+				<xs:annotation>
+					<xs:documentation>Other any other type of account number e.g. insurance contract</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="NotApplicable">
+				<xs:annotation>
+					<xs:documentation>Where information not available</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<!--Messag type indicator-->
+	<xs:simpleType name="ControllingPersonType_Type">
+		<xs:annotation>
+			<xs:documentation>This data type refers to the nature of the controlling person.
+</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="CRS801">
+				<xs:annotation>
+					<xs:documentation>CP of legal person - ownership</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CRS802">
+				<xs:annotation>
+					<xs:documentation>CP of legal person - other means</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CRS803">
+				<xs:annotation>
+					<xs:documentation>CP of legal person - senior managing official</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CRS804">
+				<xs:annotation>
+					<xs:documentation>CP of legal arrangement - trust - settlor</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CRS805">
+				<xs:annotation>
+					<xs:documentation>CP of legal arrangement - trust - trustee</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CRS806">
+				<xs:annotation>
+					<xs:documentation>CP of legal arrangement - trust - protector</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CRS807">
+				<xs:annotation>
+					<xs:documentation>CP of legal arrangement - trust - beneficiary</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CRS808">
+				<xs:annotation>
+					<xs:documentation>CP of legal arrangement - trust - other</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CRS809">
+				<xs:annotation>
+					<xs:documentation>CP of legal arrangement - other - settlor-equivalent</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CRS810">
+				<xs:annotation>
+					<xs:documentation>CP of legal arrangement - other - trustee-equivalent</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CRS811">
+				<xs:annotation>
+					<xs:documentation>CP of legal arrangement - other - protector-equivalent</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CRS812">
+				<xs:annotation>
+					<xs:documentation>CP of legal arrangement - other - beneficiary-equivalent</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CRS813">
+				<xs:annotation>
+					<xs:documentation>CP of legal arrangement - other - other-equivalent</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="NotApplicable">
+				<xs:annotation>
+					<xs:documentation>Where information not available</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<!-- DAC2_Statistics -->
+	<xs:element name="DAC2_Statistics">
+		<xs:annotation>
+			<xs:documentation>This is the root element of the statistics on Initial and Correction messages.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Header" type="cms:Header">
+					<xs:annotation>
+						<xs:documentation>This element represents the header of the message, containing its general information.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:sequence>
+					<xs:element name="records" type="Records_Type" maxOccurs="unbounded">
+						<xs:annotation>
+							<xs:documentation>This element represents the statistics related to the financial account information in tax matters for both Initial and Correction messages. It is equivalent to the Microsoft Excel file defined in the AEOI DAC2 FS for the financial account information in tax matters.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:sequence>
+			<xs:attribute name="version" type="xs:decimal" use="required">
+				<xs:annotation>
+					<xs:documentation>Identification of the XSD version being used.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="DAC2-100_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics for DAC2-100 - Message Reconciliation with CCN/CSI.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MESSAGE_ID" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element defines the identification number for the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SS_CODE" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element identifies the country code of the message sender.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RR_CODE" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element identifies the country code of the message receiver.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SENDING_COMPANY_IN" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Identification Number of the sending company.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MESSAGE_TYPE" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the type of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="WARNING" type="cms:StringMin1Max4000_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the specific cautionary instructions about use of the message content.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CONTACT" type="cms:StringMin1Max4000_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the contact information for the sender of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MESSAGE_REF" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the reference of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MESSAGE_TYPE_INDICATOR" type="cms:MessageTypeIndicator_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the nature of the data of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="REPORTING_PERIOD" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the last day of a reporting period.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MESSAGE_DATE" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the date of sending of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ACCOUNT_TOTAL" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of accounts within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AMOUNT_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the Amount within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS501_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the "Dividends" Payment type within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS502_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the "Interest" Payment type within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS503_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the  value, in Euro, of the sum of the "Gross Proceeds/Redemption" Payment type within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS504_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value, in Euro, of the sum of the "Other" Payment type within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DAC2-200_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics for DAC2-200 - Financial Institutions and Account statistics.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="SS_CODE" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element identifies the country code of the message sender.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="REPORTING_PERIOD" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the last day of a reporting period.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FINANCIAL_INSTITUTION_TOTAL" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of different identifiers of the record per country.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FINANCIAL_INSTITUTION_WITH_IN_TOTAL" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Financial Institution having an Institution Number.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RECORDS_TOTAL" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value of the sum of the Account.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AMOUNT_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value of the sum of the Amount per country.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS501_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value of the sum of the "Dividends" Payment type per country.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS502_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value of the sum of the "Interest" Payment type per country.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS503_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value of the sum of the "Gross Proceeds/Redemption" Payment type per country.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS504_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value of the sum of the "Other" Payment type per country.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DAC2-300_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics for DAC2-300 - Unique Account statistics.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="CODE" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the identifier of a Country at the level of the Country entity of the physical data model.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="REPORTING_PERIOD" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the last day of a reporting period.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DOCREFID" type="cms:StringMin1Max200_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the unique identifier of the record.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ACCOUNT_NUMBER_TYPE" type="AccountNumberType_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the type of Account number.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="HOLDER_QTY_GROUP" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of accounts.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS101_COUNT" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Account Holder types characterized by a "CRS101" type.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS102_COUNT" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Account Holder type characterized by a "CRS102" type.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS103_COUNT" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of Account Holder types characterized by a "CRS103" type.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ACCOUNT_QTY" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the number of distinct accounts (based on the FI, originating country, account number and type).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RECORDS_TOTAL" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the total number of account records.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AMOUNT_AVG_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value of the sum of the average of the Account Amounts for Country.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS501_AVG_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value of the sum of the average of the "Dividends" Amount Payment type for Country.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS502_AVG_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value of the sum of the average of the "Interest" Amount Payment type for Country.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS503_AVG_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value of the sum of the average of the "Gross Proceeds/Redemption" Amount Payment type for Country.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS504_AVG_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value of the sum of the average of the "Other" Payment type for Country.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AMOUNT_SUM_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value of the sum of the Account Amount for Country.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS501_SUM_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value of the sum of the "Dividends" Amount Payment type for Country.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS502_SUM_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value of the sum of the "Interest" Amount Payment type for Country.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS503_SUM_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value of the sum of the "Gross Proceeds/Redemption" Amount Payment type for Country.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS504_SUM_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the value of the sum of the "Other" Amount Payment type for Country.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DAC2-400_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics for DAC2-400 - Account details statistics.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MESSAGE_ID" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element defines the identification number for the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SS_CODE" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element identifies the country code of the message sender.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RR_CODE" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element identifies the country code of the message receiver.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SENDING_COMPANY_IN" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Identification Number of the sending company.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MESSAGE_TYPE" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>This element describes the type of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="WARNING" type="cms:StringMin1Max4000_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Specific cautionary instructions about use of the message content.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CONTACT" type="cms:StringMin1Max4000_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the contact information for the sender of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MESSAGE_REF" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the reference of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MESSAGE_TYPE_INDICATOR" type="cms:MessageTypeIndicator_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the nature of the data of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="REPORTING_PERIOD" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the last day of a reporting period.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MESSAGE_DATE" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the date of sending of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ACCOUNT_NUMBER_TYPE" type="AccountNumberType_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the type of Account number.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ACCOUNT_HOLDER_TYPE" type="cms:AccountHolderType_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the type of Account holder.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="HOLDER_TIN_CNT" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the number of Taxpayer identification Numbers (TIN).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="HOLDER_OIN_CNT" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the number of Organisation Identification Numbers.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="HOLDER_RES_CTRY_CNT" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the number of residence countries.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="HOLDER_IS_NP" type="xs:boolean" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the type of the person.
+					The value "1" means that the person is a natural person.
+					The value "0" means that the person is a non-natural person.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CLOSED_ACCOUNT" type="xs:boolean" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element indicate that the account is closed (value "1") or not (value "0").</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DORMANT_ACCOUNT" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation> This element indicate that the account is dormant (value "1") or not (value "0").</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RECORDS_TOTAL" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the number of accounts per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AMOUNT_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the value of the sum of amounts per Account.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS501_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the value of the sum of the "Dividends" Payment type per Account.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS502_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the value of the sum of the "Interest" Payment type per Account.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS503_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the value of the sum of the "Gross Proceeds/Redemption" Payment type per Account.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CRS504_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the value of the sum of the "Other" Payment type per Account.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CTRL_PERSON_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the value of the sum of the Controlling Person within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CTRL_AMOUNT_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the value of the sum of the amounts per Account.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CTRL_CRS501_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the value of the sum of the "Dividends" Payment type per Account.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CTRL_CRS502_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the value of the sum of the "Interest" Payment type per Account.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CTRL_CRS503_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the value of the sum of the "Gross Proceeds/Redemption" Payment type per Account.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CTRL_CRS504_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the value of the sum of the "Other" Payment type per Account.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DAC2-500_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics for DAC2-500 - Controlling Person details statistics.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="MESSAGE_ID" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element defines the identification number for the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SS_CODE" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element identifies the country code of the message sender.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RR_CODE" type="cm:CountryCode_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element identifies the country code of the message receiver.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="SENDING_COMPANY_IN" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Identification Number of the sending company.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MESSAGE_TYPE" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the type of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="WARNING" type="cms:StringMin1Max4000_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the Specific cautionary instructions about use of the message content.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CONTACT" type="cms:StringMin1Max4000_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the contact information for the sender of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MESSAGE_REF" type="xs:token" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the reference of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MESSAGE_TYPE_INDICATOR" type="cms:MessageTypeIndicator_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the nature of the data of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="REPORTING_PERIOD" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>This element describes the last day of a reporting period.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="MESSAGE_DATE" type="cm:DateYearMonthDay_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the date of sending of the message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ACCOUNT_NUMBER_TYPE" type="AccountNumberType_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the type of Account number.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ACCOUNT_HOLDER_TYPE" type="cms:AccountHolderType_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the type of Account holder.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CLOSED_ACCOUNT" type="xs:boolean" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element indicate that the account is closed (value "1") or not (value "0").</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="DORMANT_ACCOUNT" type="xs:boolean" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation> This element indicate that the account is dormant (value "1") or not (value "0").</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CONTROLLING_PERSON_TYPE" type="ControllingPersonType_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the nature of the Controlling Person.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CONTROLLING_PERSON_OIN_CNT" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the number of Organisation Identification Numbers per Party.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CONTROLLING_PERSON_TIN_CNT" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the number of Taxpayer Identification Numbers (TIN) per Party.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CONTROLLING_PERSON_RES_CTRY_CNT" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the number of residence countries per Party.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CONTROLLING_PERSON_IS_NP" type="xs:boolean" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the type of the person.
+					The value "1" means that the person is a natural person.
+					The value "0" means that the person is a non-natural person.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RECORDS_TOTAL" type="xs:integer" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the number of accounts per message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CTRL_AMOUNT_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the value of amounts within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CTRL_CRS501_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the value of the sum of the "Dividends" Payment type per Account within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CTRL_CRS502_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the value of the sum of the "Interest" Payment type per Account within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CTRL_CRS503_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the value of the sum of the "Gross Proceeds/Redemption" Payment type per Account within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CTRL_CRS504_TOTAL" type="cm:AmountValue_Type" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation> This element describes the value of the sum of the "Other" Payment type per Account within a message.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Records_Type">
+		<xs:annotation>
+			<xs:documentation>This type defines the statistics related to the financial account information in tax matters for both Initial and Correction messages.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:sequence>
+				<xs:element name="DAC2-100" type="DAC2-100_Type" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The STAT_DAC2-100 query result set presents the details of Message and it also calculates per message as well as, for each line, the number of:
+•	Accounts;
+•	Amounts (with the value of the sum of the Amounts).</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DAC2-200" type="DAC2-200_Type" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The STAT_DAC2-200 query calculates, for every Country, the number of Financial Institution and the number of Financial Institution having a Institution Number. It also presents the number of Amount per financial institution as well as, for each line, the number of:
+•	Total Amount;
+•	Amounts (with the value of the sum of the Amounts) for each different type of payment.
+This query provides quantitative information (e.g. the number of financial institution) about the Countries.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DAC2-300" type="DAC2-300_Type" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The STAT_DAC2-300 query provides quantitative information about the qualified records.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DAC2-400" type="DAC2-400_Type" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The STAT_DAC2-400 query result set presents the details of Account in terms of Account number type, account holder type, the status of the account (closed, dormant). It also presents the number of Account per message as well as, for each line, the number of:
+•	Information about Controlling Person (number, nature, type, identification number);
+•	Amounts (with the value of the sum of the Amounts).
+This query allows assessing the quality of the information qualifying the Account and associated Controlling Person.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DAC2-500" type="DAC2-500_Type" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The STAT_DAC2-500 query result set presents the details of Controlling Person in terms of Nature, Type (NP/NNP) and identification number (Organisation IN or TIN). It also presents the number of Controlling Person per message as well as, for each line, the number of:
+•	Information about Accounts;
+•	Amounts (with the value of the sum of the Amounts).
+This query allows assessing the quality of the information qualifying the Account and associated Controlling Person.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
